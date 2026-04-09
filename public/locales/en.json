@@ -1,0 +1,26 @@
+{
+  "navbar": {
+    "title": "App",
+    "user": {
+      "theme": "Theme",
+      "light": "Light",
+      "dark": "Dark",
+      "system": "System",
+      "language": "Language",
+      "lithuanian": "Lithuanian",
+      "english": "English",
+      "logout": "Log out"
+    }
+  },
+  "error": {
+    "title": "Error",
+    "code": "Error code",
+    "defaultMessage": "An unexpected error occurred",
+    "goHome": "Go home"
+  },
+  "notFound": {
+    "title": "Page not found",
+    "message": "The page you're looking for doesn't exist or has been moved.",
+    "goHome": "Go home"
+  }
+}

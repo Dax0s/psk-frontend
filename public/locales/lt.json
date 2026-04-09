@@ -1,0 +1,26 @@
+{
+  "navbar": {
+    "title": "Programa",
+    "user": {
+      "theme": "Tema",
+      "light": "Šviesi",
+      "dark": "Tamsi",
+      "system": "Sistemos",
+      "language": "Kalba",
+      "lithuanian": "Lietuvių",
+      "english": "Anglų",
+      "logout": "Atsijungti"
+    }
+  },
+  "error": {
+    "title": "Klaida",
+    "code": "Klaidos kodas",
+    "defaultMessage": "Įvyko netikėta klaida",
+    "goHome": "Į pradžią"
+  },
+  "notFound": {
+    "title": "Puslapis nerastas",
+    "message": "Ieškomas puslapis neegzistuoja arba buvo perkeltas.",
+    "goHome": "Į pradžią"
+  }
+}
