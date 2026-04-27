@@ -12,6 +12,8 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as LogoutRouteImport } from './routes/logout'
 import { Route as ErrorRouteImport } from './routes/error'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ShoppingListsIndexRouteImport } from './routes/shopping-lists.index'
+import { Route as ShoppingListsIdRouteImport } from './routes/shopping-lists.$id'
 
 const LogoutRoute = LogoutRouteImport.update({
   id: '/logout',
@@ -28,35 +30,64 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ShoppingListsIndexRoute = ShoppingListsIndexRouteImport.update({
+  id: '/shopping-lists/',
+  path: '/shopping-lists/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ShoppingListsIdRoute = ShoppingListsIdRouteImport.update({
+  id: '/shopping-lists/$id',
+  path: '/shopping-lists/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/error': typeof ErrorRoute
   '/logout': typeof LogoutRoute
+  '/shopping-lists/$id': typeof ShoppingListsIdRoute
+  '/shopping-lists/': typeof ShoppingListsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/error': typeof ErrorRoute
   '/logout': typeof LogoutRoute
+  '/shopping-lists/$id': typeof ShoppingListsIdRoute
+  '/shopping-lists': typeof ShoppingListsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/error': typeof ErrorRoute
   '/logout': typeof LogoutRoute
+  '/shopping-lists/$id': typeof ShoppingListsIdRoute
+  '/shopping-lists/': typeof ShoppingListsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/error' | '/logout'
+  fullPaths:
+    | '/'
+    | '/error'
+    | '/logout'
+    | '/shopping-lists/$id'
+    | '/shopping-lists/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/error' | '/logout'
-  id: '__root__' | '/' | '/error' | '/logout'
+  to: '/' | '/error' | '/logout' | '/shopping-lists/$id' | '/shopping-lists'
+  id:
+    | '__root__'
+    | '/'
+    | '/error'
+    | '/logout'
+    | '/shopping-lists/$id'
+    | '/shopping-lists/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ErrorRoute: typeof ErrorRoute
   LogoutRoute: typeof LogoutRoute
+  ShoppingListsIdRoute: typeof ShoppingListsIdRoute
+  ShoppingListsIndexRoute: typeof ShoppingListsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -82,6 +113,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/shopping-lists/': {
+      id: '/shopping-lists/'
+      path: '/shopping-lists'
+      fullPath: '/shopping-lists/'
+      preLoaderRoute: typeof ShoppingListsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/shopping-lists/$id': {
+      id: '/shopping-lists/$id'
+      path: '/shopping-lists/$id'
+      fullPath: '/shopping-lists/$id'
+      preLoaderRoute: typeof ShoppingListsIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -89,6 +134,8 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ErrorRoute: ErrorRoute,
   LogoutRoute: LogoutRoute,
+  ShoppingListsIdRoute: ShoppingListsIdRoute,
+  ShoppingListsIndexRoute: ShoppingListsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

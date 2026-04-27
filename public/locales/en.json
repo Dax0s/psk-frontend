@@ -22,5 +22,53 @@
     "title": "Page not found",
     "message": "The page you're looking for doesn't exist or has been moved.",
     "goHome": "Go home"
+  },
+  "shoppingLists": {
+    "title": "Shopping lists",
+    "description": "Create and manage your shopping lists.",
+    "empty": "You don't have any shopping lists yet.",
+    "loadError": "Failed to load shopping lists.",
+    "itemsProgress": "{{checked}} of {{total}} items checked",
+    "actions": {
+      "edit": "Edit",
+      "delete": "Delete",
+      "cancel": "Cancel",
+      "save": "Save",
+      "toggle": "Toggle checked"
+    },
+    "form": {
+      "name": "List name",
+      "namePlaceholder": "e.g. Groceries",
+      "create": "Create",
+      "nameRequired": "Name is required",
+      "createError": "Failed to create the shopping list.",
+      "updateError": "Failed to update the shopping list.",
+      "itemName": "Item",
+      "itemNamePlaceholder": "e.g. Milk",
+      "itemNameRequired": "Item name is required",
+      "quantity": "Qty",
+      "quantityInvalid": "Quantity must be a number ≥ 0",
+      "addItem": "Add",
+      "createItemError": "Failed to add the item.",
+      "updateItemError": "Failed to update the item."
+    },
+    "edit": {
+      "title": "Edit shopping list",
+      "description": "Update the name of your shopping list."
+    },
+    "delete": {
+      "title": "Delete shopping list",
+      "description": "Are you sure you want to delete \"{{name}}\"? This action cannot be undone."
+    },
+    "itemEdit": {
+      "title": "Edit item",
+      "description": "Update the item name and quantity."
+    },
+    "detail": {
+      "back": "Back to lists",
+      "noItems": "No items yet. Add your first one above.",
+      "loadError": "Failed to load this shopping list.",
+      "quantityLabel": "Quantity: {{quantity}}"
+    }
   }
 }
