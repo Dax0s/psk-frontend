@@ -1,6 +1,7 @@
 {
   "navbar": {
     "title": "App",
+    "families": "Families",
     "user": {
       "theme": "Theme",
       "light": "Light",
@@ -22,5 +23,51 @@
     "title": "Page not found",
     "message": "The page you're looking for doesn't exist or has been moved.",
     "goHome": "Go home"
+  },
+  "families": {
+    "title": "My Families",
+    "createFamily": "Create Family",
+    "joinFamily": "Join Family",
+    "familyName": "Family Name",
+    "familyNamePlaceholder": "Enter family name",
+    "inviteCode": "Invite Code",
+    "enterInviteCode": "Enter invite code (e.g. A3F9K2)",
+    "members": "Members",
+    "admin": "Admin",
+    "leaveFamily": "Leave Family",
+    "deleteFamily": "Delete Family",
+    "removeMember": "Remove",
+    "copyCode": "Copy code",
+    "codeCopied": "Copied!",
+    "shareHint": "Share this code with others so they can join",
+    "emptyState": "You're not in any families yet. Create one or join with an invite code!",
+    "groceryLists": "Grocery Lists",
+    "groceryListsComingSoon": "Coming soon",
+    "noGroceryLists": "No grocery lists yet.",
+    "createGroceryList": "Create Grocery List",
+    "confirmDelete": "Are you sure? This will remove all members and cannot be undone.",
+    "confirmLeave": "Are you sure you want to leave this family?",
+    "confirmRemove": "Remove this member from the family?",
+    "joinedAgo": "Joined {{time}}",
+    "memberCount": "{{count}} member",
+    "memberCount_other": "{{count}} members",
+    "you": "(you)",
+    "back": "Back to Families",
+    "create": "Create",
+    "join": "Join",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "errors": {
+      "alreadyMember": "You are already a member of this family.",
+      "familyNotFound": "Family not found. Check the invite code and try again.",
+      "generic": "Something went wrong. Please try again."
+    },
+    "success": {
+      "created": "Family created!",
+      "joined": "Joined family!",
+      "memberRemoved": "Member removed.",
+      "left": "You have left the family.",
+      "deleted": "Family deleted."
+    }
   }
 }

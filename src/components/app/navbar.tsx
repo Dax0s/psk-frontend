@@ -1,3 +1,4 @@
+import { Link } from '@tanstack/react-router'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,14 +10,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
-import {
-  Check,
-  Languages,
-  Laptop,
-  LogOut,
-  Moon,
-  Sun,
-} from 'lucide-react'
+import { Check, Languages, Laptop, LogOut, Moon, Sun } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useTheme } from '@/components/theme-provider'
 import { useAuth } from 'react-oidc-context'
@@ -31,8 +25,20 @@ export function Navbar() {
   return (
     <header className="sticky top-0 z-10 border-b bg-background">
       <div className="flex h-16 items-center justify-between px-4">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-4">
           <h1 className="text-lg font-semibold">{t('navbar.title')}</h1>
+          <nav className="flex items-center gap-1">
+            <Link
+              to="/families/"
+              className="rounded-md px-3 py-1.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+              activeProps={{
+                className:
+                  'rounded-md px-3 py-1.5 text-sm font-medium bg-muted text-foreground',
+              }}
+            >
+              {t('navbar.families')}
+            </Link>
+          </nav>
         </div>
 
         <DropdownMenu>
@@ -81,9 +87,7 @@ export function Navbar() {
             <DropdownMenuSeparator />
 
             <DropdownMenuGroup>
-              <DropdownMenuLabel>
-                {t('navbar.user.language')}
-              </DropdownMenuLabel>
+              <DropdownMenuLabel>{t('navbar.user.language')}</DropdownMenuLabel>
               <DropdownMenuItem onClick={() => i18n.changeLanguage('lt')}>
                 <Languages />
                 {t('navbar.user.lithuanian')}

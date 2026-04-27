@@ -1,6 +1,7 @@
 {
   "navbar": {
     "title": "Programa",
+    "families": "Šeimos",
     "user": {
       "theme": "Tema",
       "light": "Šviesi",
@@ -22,5 +23,51 @@
     "title": "Puslapis nerastas",
     "message": "Ieškomas puslapis neegzistuoja arba buvo perkeltas.",
     "goHome": "Į pradžią"
+  },
+  "families": {
+    "title": "Mano šeimos",
+    "createFamily": "Kurti šeimą",
+    "joinFamily": "Prisijungti prie šeimos",
+    "familyName": "Šeimos pavadinimas",
+    "familyNamePlaceholder": "Įveskite šeimos pavadinimą",
+    "inviteCode": "Pakvietimo kodas",
+    "enterInviteCode": "Įveskite pakvietimo kodą (pvz. A3F9K2)",
+    "members": "Nariai",
+    "admin": "Administratorius",
+    "leaveFamily": "Palikti šeimą",
+    "deleteFamily": "Ištrinti šeimą",
+    "removeMember": "Pašalinti",
+    "copyCode": "Kopijuoti kodą",
+    "codeCopied": "Nukopijuota!",
+    "shareHint": "Pasidalinkite šiuo kodu su kitais, kad jie galėtų prisijungti",
+    "emptyState": "Dar nepriklausote jokiai šeimai. Sukurkite ją arba prisijunkite su pakvietimo kodu!",
+    "groceryLists": "Pirkinių sąrašai",
+    "groceryListsComingSoon": "Netrukus",
+    "noGroceryLists": "Pirkinių sąrašų dar nėra.",
+    "createGroceryList": "Kurti pirkinių sąrašą",
+    "confirmDelete": "Ar tikrai? Tai pašalins visus narius ir negali būti atšaukta.",
+    "confirmLeave": "Ar tikrai norite palikti šią šeimą?",
+    "confirmRemove": "Pašalinti šį narį iš šeimos?",
+    "joinedAgo": "Prisijungė {{time}}",
+    "memberCount": "{{count}} narys",
+    "memberCount_other": "{{count}} nariai",
+    "you": "(tu)",
+    "back": "Atgal į šeimas",
+    "create": "Kurti",
+    "join": "Prisijungti",
+    "cancel": "Atšaukti",
+    "confirm": "Patvirtinti",
+    "errors": {
+      "alreadyMember": "Jūs jau esate šios šeimos narys.",
+      "familyNotFound": "Šeima nerasta. Patikrinkite pakvietimo kodą ir bandykite dar kartą.",
+      "generic": "Kažkas nutiko. Bandykite dar kartą."
+    },
+    "success": {
+      "created": "Šeima sukurta!",
+      "joined": "Prisijungta prie šeimos!",
+      "memberRemoved": "Narys pašalintas.",
+      "left": "Jūs palikote šeimą.",
+      "deleted": "Šeima ištrinta."
+    }
   }
 }

@@ -23,6 +23,8 @@ function Index() {
     return <CenteredSpinner />
   }
 
+  console.log(auth.user?.access_token)
+
   return (
     <div className="flex min-h-screen flex-col">
       <Navbar />
@@ -30,7 +32,8 @@ function Index() {
         <div className="flex flex-col items-center justify-center py-12">
           <h1 className="text-4xl font-bold mb-4">Welcome</h1>
           <p className="text-muted-foreground">
-            This is your default home page. Start building your application here.
+            This is your default home page. Start building your application
+            here.
           </p>
         </div>
       </main>
