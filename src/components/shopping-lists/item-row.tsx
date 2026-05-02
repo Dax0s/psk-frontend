@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Pencil, Trash2 } from 'lucide-react'
+import { Pencil, Pin, Trash2 } from 'lucide-react'
+import { useAuth } from 'react-oidc-context'
 
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
@@ -12,6 +13,12 @@ import {
   useUpdateShoppingListItem,
 } from '@/hooks/use-shopping-lists'
 import type { ShoppingListItem } from '@/hooks/use-shopping-lists'
+import {
+  useCreatePinnedProduct,
+  usePinnedProducts,
+} from '@/hooks/use-suggestions'
+
+const personalScopeType = 'PERSONAL'
 
 export function ItemRow({
   listId,
@@ -21,14 +28,38 @@ export function ItemRow({
   item: ShoppingListItem
 }) {
   const { t } = useTranslation()
+  const auth = useAuth()
+  const scopeReferenceId = auth.user?.profile.sub ?? ''
   const [editOpen, setEditOpen] = useState(false)
   const updateMutation = useUpdateShoppingListItem(listId)
   const deleteMutation = useDeleteShoppingListItem(listId)
+  const createPinnedProduct = useCreatePinnedProduct(
+    personalScopeType,
+    scopeReferenceId,
+  )
+  const pinnedProductsQuery = usePinnedProducts(
+    personalScopeType,
+    scopeReferenceId,
+  )
+  const normalizedItemName = normalizeProductKey(item.name)
+  const isPinned =
+    pinnedProductsQuery.data?.some(
+      (product) =>
+        product.productKey === normalizedItemName ||
+        normalizeProductKey(product.displayName) === normalizedItemName,
+    ) ?? false
 
   function toggleChecked(next: boolean) {
     updateMutation.mutate({
       itemId: item.id,
       body: { name: item.name, quantity: item.quantity, checked: next },
+    })
+  }
+
+  function pinItem() {
+    createPinnedProduct.mutate({
+      displayName: item.name,
+      defaultQuantity: item.quantity,
     })
   }
 
@@ -67,6 +98,17 @@ export function ItemRow({
             <Pencil />
           </Button>
           <Button
+            variant={isPinned ? 'secondary' : 'ghost'}
+            size="icon-sm"
+            onClick={pinItem}
+            disabled={
+              !scopeReferenceId || isPinned || createPinnedProduct.isPending
+            }
+            aria-label="Pin item"
+          >
+            {createPinnedProduct.isPending ? <Spinner /> : <Pin />}
+          </Button>
+          <Button
             variant="ghost"
             size="icon-sm"
             onClick={() => deleteMutation.mutate(item.id)}
@@ -86,4 +128,8 @@ export function ItemRow({
       />
     </>
   )
+}
+
+function normalizeProductKey(value: string) {
+  return value.trim().toLowerCase().replace(/\s+/g, ' ')
 }
