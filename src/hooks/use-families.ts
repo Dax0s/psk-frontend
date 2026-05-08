@@ -3,6 +3,7 @@ import { useNavigate } from '@tanstack/react-router'
 import { HTTPError } from 'ky'
 import { toast } from 'sonner'
 import { useTranslation } from 'react-i18next'
+import { useAuth } from 'react-oidc-context'
 
 import { useApi } from '@/api/api-provider'
 import type { FamilyDetail, FamilySummary } from '@/api/families'
@@ -13,17 +14,21 @@ const FAMILIES_KEY = ['families'] as const
 
 export function useMyFamilies() {
   const api = useApi()
+  const auth = useAuth()
   return useQuery({
     queryKey: FAMILIES_KEY,
-    queryFn: () => api.get('families').json<FamilySummary[]>(),
+    queryFn: () => api.get('family').json<FamilySummary[]>(),
+    enabled: !!auth.user?.access_token,
   })
 }
 
 export function useFamilyDetail(familyId: string) {
   const api = useApi()
+  const auth = useAuth()
   return useQuery({
     queryKey: [...FAMILIES_KEY, familyId],
-    queryFn: () => api.get(`families/${familyId}`).json<FamilyDetail>(),
+    queryFn: () => api.get(`family/${familyId}`).json<FamilyDetail>(),
+    enabled: !!auth.user?.access_token,
   })
 }
 
@@ -50,7 +55,7 @@ export function useCreateFamily() {
 
   return useMutation({
     mutationFn: ({ name, email }: { name: string; email?: string }) =>
-      api.post('families', { json: { name, email } }).json<FamilySummary>(),
+      api.post('family', { json: { name, email } }).json<FamilySummary>(),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: FAMILIES_KEY })
       toast.success(t('families.success.created'))
@@ -80,7 +85,7 @@ export function useJoinFamily() {
       email?: string
     }) =>
       api
-        .post('families/join', { json: { inviteCode, email } })
+        .post('family/join', { json: { inviteCode, email } })
         .json<FamilySummary>(),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: FAMILIES_KEY })
@@ -107,7 +112,7 @@ export function useDeleteFamily() {
 
   return useMutation({
     mutationFn: (familyId: string) =>
-      api.delete(`families/${familyId}`).then(() => undefined),
+      api.delete(`family/${familyId}`).then(() => undefined),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: FAMILIES_KEY })
       toast.success(t('families.success.deleted'))
@@ -126,9 +131,7 @@ export function useRemoveMember() {
 
   return useMutation({
     mutationFn: ({ familyId, userId }: { familyId: string; userId: string }) =>
-      api
-        .delete(`families/${familyId}/members/${userId}`)
-        .then(() => undefined),
+      api.delete(`family/${familyId}/members/${userId}`).then(() => undefined),
     onSuccess: (_, { familyId }) => {
       qc.invalidateQueries({ queryKey: [...FAMILIES_KEY, familyId] })
       toast.success(t('families.success.memberRemoved'))
@@ -147,7 +150,7 @@ export function useLeaveFamily() {
 
   return useMutation({
     mutationFn: (familyId: string) =>
-      api.post(`families/${familyId}/leave`).then(() => undefined),
+      api.post(`family/${familyId}/leave`).then(() => undefined),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: FAMILIES_KEY })
       toast.success(t('families.success.left'))

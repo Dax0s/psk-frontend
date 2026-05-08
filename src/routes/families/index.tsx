@@ -22,6 +22,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -181,6 +182,9 @@ function CreateFamilyDialog() {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>{t('families.createFamily')}</DialogTitle>
+          <DialogDescription className="sr-only">
+            {t('families.createFamily')}
+          </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <div className="flex flex-col gap-1.5">
@@ -244,6 +248,9 @@ function JoinFamilyDialog() {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>{t('families.joinFamily')}</DialogTitle>
+          <DialogDescription className="sr-only">
+            {t('families.joinFamily')}
+          </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <div className="flex flex-col gap-1.5">
