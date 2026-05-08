@@ -8,8 +8,8 @@ export type SuggestedProduct = {
   displayName: string
   suggestedQuantity: number | null
   unit: string | null
-  purchaseCount: number
-  lastCompletedAt: string
+  entryCount: number
+  lastEnteredAt: string
 }
 
 export type PinnedProduct = {
@@ -20,6 +20,7 @@ export type PinnedProduct = {
   displayName: string
   defaultQuantity: number | null
   unit: string | null
+  sortOrder: number
   createdAt: string
   updatedAt: string
 }
@@ -29,6 +30,7 @@ export type UpsertPinnedProductRequest = {
   productKey?: string
   defaultQuantity?: number | null
   unit?: string | null
+  sortOrder?: number | null
 }
 
 const scopePath = (scopeType: SuggestionScopeType, scopeReferenceId: string) =>

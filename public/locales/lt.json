@@ -78,11 +78,14 @@
       "title": "Prisegtos",
       "previous": "Ankstesnės prisegtos prekės",
       "next": "Kitos prisegtos prekės",
+      "pageLabel": "Prisegtų prekių puslapis {{page}}",
       "loadError": "Nepavyko įkelti prisegtų prekių.",
       "empty": "Prisegtų prekių dar nėra.",
       "addLabel": "Pridėti {{name}}",
       "quantityLabel": "Prisegtos prekės {{name}} kiekis",
-      "deleteLabel": "Ištrinti prisegtą prekę {{name}}"
+      "deleteLabel": "Ištrinti prisegtą prekę {{name}}",
+      "moveUpLabel": "Perkelti {{name}} aukštyn",
+      "moveDownLabel": "Perkelti {{name}} žemyn"
     }
   }
 }

@@ -78,11 +78,14 @@
       "title": "Pins",
       "previous": "Previous pinned products",
       "next": "Next pinned products",
+      "pageLabel": "Pinned products page {{page}}",
       "loadError": "Failed to load pins.",
       "empty": "No pins yet.",
       "addLabel": "Add {{name}}",
       "quantityLabel": "{{name}} pinned quantity",
-      "deleteLabel": "Delete {{name}} pin"
+      "deleteLabel": "Delete {{name}} pin",
+      "moveUpLabel": "Move {{name}} up",
+      "moveDownLabel": "Move {{name}} down"
     }
   }
 }
