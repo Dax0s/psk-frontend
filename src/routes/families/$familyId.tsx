@@ -14,6 +14,8 @@ import {
   Trash2Icon,
   UserMinusIcon,
 } from 'lucide-react'
+import { useFamilyShoppingLists } from '@/hooks/use-shopping-lists'
+import { CreateShoppingListForm } from '@/components/shopping-lists/create-shopping-list-form'
 import { toast } from 'sonner'
 
 import { Route as errorRoute } from '@/routes/error'
@@ -21,13 +23,7 @@ import { Navbar } from '@/components/app/navbar'
 import { Footer } from '@/components/app/footer'
 import { CenteredSpinner } from '@/components/centered-spinner'
 import { Button } from '@/components/ui/button'
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Skeleton } from '@/components/ui/skeleton'
 import {
@@ -41,12 +37,6 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/ui/tooltip'
 import {
   useFamilyDetail,
   useDeleteFamily,
@@ -89,6 +79,7 @@ function FamilyDetail() {
   const { data: family, isLoading } = useFamilyDetail(familyId)
   const { mutate: deleteFamily, isPending: isDeleting } = useDeleteFamily()
   const { mutate: leaveFamily, isPending: isLeaving } = useLeaveFamily()
+  const { data: familyLists } = useFamilyShoppingLists(familyId)
 
   if (isLoading) {
     return (
@@ -237,30 +228,34 @@ function FamilyDetail() {
         </CardContent>
       </Card>
 
-      {/* Grocery lists placeholder */}
+      {/* Grocery lists */}
       <Card>
         <CardHeader>
           <CardTitle>{t('families.groceryLists')}</CardTitle>
-          <CardDescription>{t('families.noGroceryLists')}</CardDescription>
         </CardHeader>
-        <CardContent>
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <span className="inline-block">
-                  <Button disabled>
-                    <ShoppingCartIcon />
-                    {t('families.createGroceryList')}
-                  </Button>
-                </span>
-              </TooltipTrigger>
-              <TooltipContent>
-                {t('families.groceryListsComingSoon')}
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
+        <CardContent className="flex flex-col gap-2">
+          {familyLists?.map((list) => (
+            <Button
+              key={list.id}
+              asChild
+              variant="outline"
+              className="justify-start"
+            >
+              <Link to="/shopping-lists/$id" params={{ id: list.id }}>
+                <ShoppingCartIcon />
+                {list.name}
+              </Link>
+            </Button>
+          ))}
+          {familyLists?.length === 0 && (
+            <p className="text-sm text-muted-foreground">
+              {t('families.noGroceryLists')}
+            </p>
+          )}
         </CardContent>
       </Card>
+
+      <CreateShoppingListForm familyId={familyId} />
     </div>
   )
 }

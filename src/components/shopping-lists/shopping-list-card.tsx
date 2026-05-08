@@ -40,6 +40,15 @@ export function ShoppingListCard({ list }: { list: ShoppingList }) {
               total: totalCount,
             })}
           </CardDescription>
+          {list.familyId && (
+            <Link
+              to="/families/$familyId"
+              params={{ familyId: list.familyId }}
+              className="text-sm font-medium underline hover:text-foreground text-muted-foreground"
+            >
+              {list.familyName}
+            </Link>
+          )}
           <CardAction>
             <div className="flex gap-1">
               <Button
