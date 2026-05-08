@@ -27,8 +27,6 @@ function Index() {
     return <CenteredSpinner />
   }
 
-  console.log(auth.user?.access_token)
-
   return (
     <div className="flex min-h-screen flex-col">
       <Navbar />
