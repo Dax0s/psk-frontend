@@ -69,5 +69,53 @@
       "left": "Jūs palikote šeimą.",
       "deleted": "Šeima ištrinta."
     }
+  },
+  "shoppingLists": {
+    "title": "Pirkinių sąrašai",
+    "description": "Kurkite ir tvarkykite savo pirkinių sąrašus.",
+    "empty": "Dar neturite pirkinių sąrašų.",
+    "loadError": "Nepavyko įkelti pirkinių sąrašų.",
+    "itemsProgress": "Pažymėta {{checked}} iš {{total}} prekių",
+    "actions": {
+      "edit": "Redaguoti",
+      "delete": "Ištrinti",
+      "cancel": "Atšaukti",
+      "save": "Išsaugoti",
+      "toggle": "Perjungti pažymėjimą"
+    },
+    "form": {
+      "name": "Sąrašo pavadinimas",
+      "namePlaceholder": "pvz. Maistas",
+      "create": "Sukurti",
+      "nameRequired": "Pavadinimas privalomas",
+      "createError": "Nepavyko sukurti pirkinių sąrašo.",
+      "updateError": "Nepavyko atnaujinti pirkinių sąrašo.",
+      "itemName": "Prekė",
+      "itemNamePlaceholder": "pvz. Pienas",
+      "itemNameRequired": "Prekės pavadinimas privalomas",
+      "quantity": "Kiekis",
+      "quantityInvalid": "Kiekis turi būti skaičius ≥ 0",
+      "addItem": "Pridėti",
+      "createItemError": "Nepavyko pridėti prekės.",
+      "updateItemError": "Nepavyko atnaujinti prekės."
+    },
+    "edit": {
+      "title": "Redaguoti pirkinių sąrašą",
+      "description": "Atnaujinkite pirkinių sąrašo pavadinimą."
+    },
+    "delete": {
+      "title": "Ištrinti pirkinių sąrašą",
+      "description": "Ar tikrai norite ištrinti „{{name}}“? Šio veiksmo atšaukti negalėsite."
+    },
+    "itemEdit": {
+      "title": "Redaguoti prekę",
+      "description": "Atnaujinkite prekės pavadinimą ir kiekį."
+    },
+    "detail": {
+      "back": "Grįžti į sąrašus",
+      "noItems": "Prekių dar nėra. Pridėkite pirmą prekę aukščiau.",
+      "loadError": "Nepavyko įkelti šio pirkinių sąrašo.",
+      "quantityLabel": "Kiekis: {{quantity}}"
+    }
   }
 }
