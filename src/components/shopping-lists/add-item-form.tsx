@@ -148,10 +148,12 @@ function ProductMatches({
   isPending: boolean
   onSelect: (product: SuggestedProduct) => void
 }) {
+  const { t } = useTranslation()
+
   return (
     <div className="flex flex-col gap-2">
       <ProductMatchGroup
-        label="Suggestions"
+        label={t('shoppingLists.suggestions.title')}
         products={suggestions}
         isPending={isPending}
         onSelect={onSelect}

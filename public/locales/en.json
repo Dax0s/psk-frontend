@@ -34,7 +34,8 @@
       "delete": "Delete",
       "cancel": "Cancel",
       "save": "Save",
-      "toggle": "Toggle checked"
+      "toggle": "Toggle checked",
+      "pin": "Pin item"
     },
     "form": {
       "name": "List name",
@@ -69,6 +70,19 @@
       "noItems": "No items yet. Add your first one above.",
       "loadError": "Failed to load this shopping list.",
       "quantityLabel": "Quantity: {{quantity}}"
+    },
+    "suggestions": {
+      "title": "Suggestions"
+    },
+    "pins": {
+      "title": "Pins",
+      "previous": "Previous pinned products",
+      "next": "Next pinned products",
+      "loadError": "Failed to load pins.",
+      "empty": "No pins yet.",
+      "addLabel": "Add {{name}}",
+      "quantityLabel": "{{name}} pinned quantity",
+      "deleteLabel": "Delete {{name}} pin"
     }
   }
 }

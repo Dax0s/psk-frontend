@@ -34,7 +34,8 @@
       "delete": "Ištrinti",
       "cancel": "Atšaukti",
       "save": "Išsaugoti",
-      "toggle": "Perjungti pažymėjimą"
+      "toggle": "Perjungti pažymėjimą",
+      "pin": "Prisegti prekę"
     },
     "form": {
       "name": "Sąrašo pavadinimas",
@@ -69,6 +70,19 @@
       "noItems": "Prekių dar nėra. Pridėkite pirmą prekę aukščiau.",
       "loadError": "Nepavyko įkelti šio pirkinių sąrašo.",
       "quantityLabel": "Kiekis: {{quantity}}"
+    },
+    "suggestions": {
+      "title": "Pasiūlymai"
+    },
+    "pins": {
+      "title": "Prisegtos",
+      "previous": "Ankstesnės prisegtos prekės",
+      "next": "Kitos prisegtos prekės",
+      "loadError": "Nepavyko įkelti prisegtų prekių.",
+      "empty": "Prisegtų prekių dar nėra.",
+      "addLabel": "Pridėti {{name}}",
+      "quantityLabel": "Prisegtos prekės {{name}} kiekis",
+      "deleteLabel": "Ištrinti prisegtą prekę {{name}}"
     }
   }
 }

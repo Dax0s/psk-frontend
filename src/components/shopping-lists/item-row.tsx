@@ -104,7 +104,7 @@ export function ItemRow({
             disabled={
               !scopeReferenceId || isPinned || createPinnedProduct.isPending
             }
-            aria-label="Pin item"
+            aria-label={t('shoppingLists.actions.pin')}
           >
             {createPinnedProduct.isPending ? <Spinner /> : <Pin />}
           </Button>

@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { ChevronLeft, ChevronRight, Pin, Trash2 } from 'lucide-react'
 import { useAuth } from 'react-oidc-context'
 
@@ -18,6 +19,7 @@ const personalScopeType = 'PERSONAL'
 const pageSize = 6
 
 export function PinnedProductsPanel({ listId }: { listId: string }) {
+  const { t } = useTranslation()
   const auth = useAuth()
   const scopeReferenceId = auth.user?.profile.sub ?? ''
   const [page, setPage] = useState(0)
@@ -67,7 +69,7 @@ export function PinnedProductsPanel({ listId }: { listId: string }) {
       <CardHeader className="grid-cols-[1fr_auto]">
         <CardTitle className="flex items-center gap-2">
           <Pin className="size-4" />
-          Pins
+          {t('shoppingLists.pins.title')}
         </CardTitle>
         {totalPages > 1 && (
           <div className="flex items-center gap-1">
@@ -76,7 +78,7 @@ export function PinnedProductsPanel({ listId }: { listId: string }) {
               size="icon-xs"
               onClick={() => setPage((current) => Math.max(0, current - 1))}
               disabled={safePage === 0}
-              aria-label="Previous pinned products"
+              aria-label={t('shoppingLists.pins.previous')}
             >
               <ChevronLeft />
             </Button>
@@ -90,7 +92,7 @@ export function PinnedProductsPanel({ listId }: { listId: string }) {
                 setPage((current) => Math.min(totalPages - 1, current + 1))
               }
               disabled={safePage >= totalPages - 1}
-              aria-label="Next pinned products"
+              aria-label={t('shoppingLists.pins.next')}
             >
               <ChevronRight />
             </Button>
@@ -103,8 +105,16 @@ export function PinnedProductsPanel({ listId }: { listId: string }) {
           isLoading={pinnedProductsQuery.isLoading}
           isError={pinnedProductsQuery.isError}
           adding={createItem.isPending}
-          deletingId={deletePinnedProduct.variables}
-          updatingId={updatePinnedProduct.variables?.id}
+          deletingId={
+            deletePinnedProduct.isPending
+              ? deletePinnedProduct.variables
+              : undefined
+          }
+          updatingId={
+            updatePinnedProduct.isPending
+              ? updatePinnedProduct.variables.id
+              : undefined
+          }
           onAdd={addPinnedProduct}
           onDelete={(id) => deletePinnedProduct.mutate(id)}
           onQuantityChange={updatePinnedQuantity}
@@ -135,6 +145,8 @@ function PinnedProductsContent({
   onDelete: (id: number) => void
   onQuantityChange: (product: PinnedProduct, quantity: number) => void
 }) {
+  const { t } = useTranslation()
+
   if (isLoading) {
     return (
       <div className="flex justify-center py-4">
@@ -144,11 +156,19 @@ function PinnedProductsContent({
   }
 
   if (isError) {
-    return <p className="text-sm text-destructive">Failed to load pins.</p>
+    return (
+      <p className="text-sm text-destructive">
+        {t('shoppingLists.pins.loadError')}
+      </p>
+    )
   }
 
   if (products.length === 0) {
-    return <p className="text-sm text-muted-foreground">No pins yet.</p>
+    return (
+      <p className="text-sm text-muted-foreground">
+        {t('shoppingLists.pins.empty')}
+      </p>
+    )
   }
 
   return (
@@ -190,6 +210,7 @@ function PinnedProductRow({
   const [quantity, setQuantity] = useState(formatQuantity(initialQuantity))
   const parsedQuantity = parseQuantity(quantity)
   const canUseQuantity = parsedQuantity !== null
+  const { t } = useTranslation()
 
   useEffect(() => {
     setQuantity(formatQuantity(initialQuantity))
@@ -221,7 +242,9 @@ function PinnedProductRow({
           addCurrentQuantity()
         }
       }}
-      aria-label={`Add ${product.displayName}`}
+      aria-label={t('shoppingLists.pins.addLabel', {
+        name: product.displayName,
+      })}
     >
       <div className="min-w-0">
         <p className="truncate text-sm font-medium">{product.displayName}</p>
@@ -240,12 +263,15 @@ function PinnedProductRow({
         onChange={(event) => setQuantity(event.target.value)}
         onBlur={saveQuantity}
         onKeyDown={(event) => {
+          event.stopPropagation()
           if (event.key === 'Enter') {
             event.currentTarget.blur()
           }
         }}
         disabled={updating}
-        aria-label={`${product.displayName} pinned quantity`}
+        aria-label={t('shoppingLists.pins.quantityLabel', {
+          name: product.displayName,
+        })}
         className="h-7 px-2 text-sm"
         onClick={(event) => event.stopPropagation()}
       />
@@ -257,7 +283,9 @@ function PinnedProductRow({
           onDelete(product.id)
         }}
         disabled={deleting}
-        aria-label={`Delete ${product.displayName} pin`}
+        aria-label={t('shoppingLists.pins.deleteLabel', {
+          name: product.displayName,
+        })}
       >
         {deleting ? <Spinner /> : <Trash2 />}
       </Button>
