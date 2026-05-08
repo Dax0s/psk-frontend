@@ -14,6 +14,8 @@ import { Route as ErrorRouteImport } from './routes/error'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as FamiliesIndexRouteImport } from './routes/families/index'
 import { Route as FamiliesFamilyIdRouteImport } from './routes/families/$familyId'
+import { Route as ShoppingListsIndexRouteImport } from './routes/shopping-lists.index'
+import { Route as ShoppingListsIdRouteImport } from './routes/shopping-lists.$id'
 
 const LogoutRoute = LogoutRouteImport.update({
   id: '/logout',
@@ -40,6 +42,16 @@ const FamiliesFamilyIdRoute = FamiliesFamilyIdRouteImport.update({
   path: '/families/$familyId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ShoppingListsIndexRoute = ShoppingListsIndexRouteImport.update({
+  id: '/shopping-lists/',
+  path: '/shopping-lists/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ShoppingListsIdRoute = ShoppingListsIdRouteImport.update({
+  id: '/shopping-lists/$id',
+  path: '/shopping-lists/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -47,6 +59,8 @@ export interface FileRoutesByFullPath {
   '/logout': typeof LogoutRoute
   '/families/$familyId': typeof FamiliesFamilyIdRoute
   '/families/': typeof FamiliesIndexRoute
+  '/shopping-lists/$id': typeof ShoppingListsIdRoute
+  '/shopping-lists/': typeof ShoppingListsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -54,6 +68,8 @@ export interface FileRoutesByTo {
   '/logout': typeof LogoutRoute
   '/families/$familyId': typeof FamiliesFamilyIdRoute
   '/families': typeof FamiliesIndexRoute
+  '/shopping-lists/$id': typeof ShoppingListsIdRoute
+  '/shopping-lists': typeof ShoppingListsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -62,12 +78,14 @@ export interface FileRoutesById {
   '/logout': typeof LogoutRoute
   '/families/$familyId': typeof FamiliesFamilyIdRoute
   '/families/': typeof FamiliesIndexRoute
+  '/shopping-lists/$id': typeof ShoppingListsIdRoute
+  '/shopping-lists/': typeof ShoppingListsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/error' | '/logout' | '/families/$familyId' | '/families/'
+  fullPaths: '/' | '/error' | '/logout' | '/families/$familyId' | '/families/' | '/shopping-lists/$id' | '/shopping-lists/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/error' | '/logout' | '/families/$familyId' | '/families'
+  to: '/' | '/error' | '/logout' | '/families/$familyId' | '/families' | '/shopping-lists/$id' | '/shopping-lists'
   id:
     | '__root__'
     | '/'
@@ -75,6 +93,8 @@ export interface FileRouteTypes {
     | '/logout'
     | '/families/$familyId'
     | '/families/'
+    | '/shopping-lists/$id'
+    | '/shopping-lists/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -83,6 +103,8 @@ export interface RootRouteChildren {
   LogoutRoute: typeof LogoutRoute
   FamiliesFamilyIdRoute: typeof FamiliesFamilyIdRoute
   FamiliesIndexRoute: typeof FamiliesIndexRoute
+  ShoppingListsIdRoute: typeof ShoppingListsIdRoute
+  ShoppingListsIndexRoute: typeof ShoppingListsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -120,6 +142,18 @@ declare module '@tanstack/react-router' {
       path: '/families/$familyId'
       fullPath: '/families/$familyId'
       preLoaderRoute: typeof FamiliesFamilyIdRouteImport
+    '/shopping-lists/': {
+      id: '/shopping-lists/'
+      path: '/shopping-lists'
+      fullPath: '/shopping-lists/'
+      preLoaderRoute: typeof ShoppingListsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/shopping-lists/$id': {
+      id: '/shopping-lists/$id'
+      path: '/shopping-lists/$id'
+      fullPath: '/shopping-lists/$id'
+      preLoaderRoute: typeof ShoppingListsIdRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -131,6 +165,8 @@ const rootRouteChildren: RootRouteChildren = {
   LogoutRoute: LogoutRoute,
   FamiliesFamilyIdRoute: FamiliesFamilyIdRoute,
   FamiliesIndexRoute: FamiliesIndexRoute,
+  ShoppingListsIdRoute: ShoppingListsIdRoute,
+  ShoppingListsIndexRoute: ShoppingListsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
