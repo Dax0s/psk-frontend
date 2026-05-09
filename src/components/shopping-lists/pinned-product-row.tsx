@@ -4,9 +4,10 @@ import { ArrowDown, ArrowUp, Plus, Trash2 } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
+import { NumberInput } from '@/components/ui/number-input'
 import { Spinner } from '@/components/ui/spinner'
 import type { PinnedProduct } from '@/hooks/use-suggestions'
+import { parseQuantity } from '@/lib/utils'
 
 export function PinnedProductRow({
   product,
@@ -29,7 +30,7 @@ export function PinnedProductRow({
   canMoveUp: boolean
   canMoveDown: boolean
   onAdd: (product: PinnedProduct, quantity: number) => void
-  onDelete: (id: number) => void
+  onDelete: (id: string) => void
   onQuantityChange: (product: PinnedProduct, quantity: number) => void
   onMove: (product: PinnedProduct, direction: -1 | 1) => void
 }) {
@@ -66,7 +67,7 @@ export function PinnedProductRow({
             onClick={() => onMove(product, -1)}
             disabled={!canMoveUp || moving}
             aria-label={t('shoppingLists.pins.moveUpLabel', {
-              name: product.displayName,
+              name: product.name,
             })}
           >
             {moving ? <Spinner /> : <ArrowUp />}
@@ -77,36 +78,28 @@ export function PinnedProductRow({
             onClick={() => onMove(product, 1)}
             disabled={!canMoveDown || moving}
             aria-label={t('shoppingLists.pins.moveDownLabel', {
-              name: product.displayName,
+              name: product.name,
             })}
           >
             <ArrowDown />
           </Button>
         </div>
         <div className="flex-1 min-w-0">
-          <p className="truncate text-sm font-medium">{product.displayName}</p>
-          {product.unit && (
-            <p className="truncate text-xs text-muted-foreground">
-              {product.unit}
-            </p>
-          )}
+          <p className="text-sm font-medium break-words">{product.name}</p>
         </div>
-        <Input
-          type="number"
-          min="0"
-          step="any"
-          inputMode="decimal"
+        <NumberInput
+          min={0}
           value={quantity}
-          onChange={(e) => setQuantity(e.target.value)}
+          onChange={setQuantity}
           onBlur={saveQuantity}
           onKeyDown={(e) => {
             if (e.key === 'Enter') e.currentTarget.blur()
           }}
           disabled={updating}
           aria-label={t('shoppingLists.pins.quantityLabel', {
-            name: product.displayName,
+            name: product.name,
           })}
-          className="h-7 w-16 px-2 text-sm"
+          className="h-7 w-20 pl-2 text-sm"
         />
         <Button
           variant="ghost"
@@ -114,7 +107,7 @@ export function PinnedProductRow({
           onClick={addToList}
           disabled={adding || parsedQuantity === null}
           aria-label={t('shoppingLists.pins.addLabel', {
-            name: product.displayName,
+            name: product.name,
           })}
         >
           {adding ? <Spinner /> : <Plus />}
@@ -125,7 +118,7 @@ export function PinnedProductRow({
           onClick={() => onDelete(product.id)}
           disabled={deleting}
           aria-label={t('shoppingLists.pins.deleteLabel', {
-            name: product.displayName,
+            name: product.name,
           })}
         >
           {deleting ? <Spinner /> : <Trash2 />}
@@ -133,9 +126,4 @@ export function PinnedProductRow({
       </CardContent>
     </Card>
   )
-}
-
-function parseQuantity(value: string) {
-  const quantity = Number(value)
-  return Number.isFinite(quantity) && quantity >= 0 ? quantity : null
 }

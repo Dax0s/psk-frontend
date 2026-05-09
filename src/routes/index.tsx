@@ -27,18 +27,11 @@ function Index() {
     return <CenteredSpinner />
   }
 
-  console.log(auth.user?.access_token)
-
   return (
     <div className="flex min-h-screen flex-col">
       <Navbar />
       <main className="flex-1 container mx-auto p-4">
         <div className="flex flex-col items-center justify-center py-12 gap-6">
-          <h1 className="text-4xl font-bold">Welcome</h1>
-          <p className="text-muted-foreground">
-            This is your default home page. Start building your application
-            here.
-          </p>
           <Button asChild size="lg">
             <Link to="/shopping-lists">
               <ShoppingCart />

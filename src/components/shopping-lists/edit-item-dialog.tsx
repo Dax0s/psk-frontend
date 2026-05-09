@@ -12,9 +12,13 @@ import {
 } from '@/components/ui/dialog'
 import { Field, FieldError, FieldLabel } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
+import { NumberInput } from '@/components/ui/number-input'
 import { Spinner } from '@/components/ui/spinner'
+import { CategorySelect } from '@/components/shopping-lists/category-select'
 import { useUpdateShoppingListItem } from '@/hooks/use-shopping-lists'
 import type { ShoppingListItem } from '@/hooks/use-shopping-lists'
+import type { ProductCategory } from '@/hooks/use-product-suggestions'
+import { parseQuantity } from '@/lib/utils'
 
 export function EditItemDialog({
   listId,
@@ -30,6 +34,7 @@ export function EditItemDialog({
   const { t } = useTranslation()
   const [name, setName] = useState(item.name)
   const [quantity, setQuantity] = useState(String(item.quantity))
+  const [category, setCategory] = useState<ProductCategory>(item.category)
   const [error, setError] = useState<string | null>(null)
   const updateMutation = useUpdateShoppingListItem(listId)
 
@@ -37,6 +42,7 @@ export function EditItemDialog({
     if (next) {
       setName(item.name)
       setQuantity(String(item.quantity))
+      setCategory(item.category)
       setError(null)
     }
     onOpenChange(next)
@@ -48,8 +54,8 @@ export function EditItemDialog({
       setError(t('shoppingLists.form.itemNameRequired'))
       return
     }
-    const parsed = Number(quantity)
-    if (!Number.isFinite(parsed) || parsed < 0) {
+    const parsed = parseQuantity(quantity)
+    if (parsed === null) {
       setError(t('shoppingLists.form.quantityInvalid'))
       return
     }
@@ -61,6 +67,7 @@ export function EditItemDialog({
           name: name.trim(),
           quantity: parsed,
           checked: item.checked,
+          category,
         },
       },
       {
@@ -95,18 +102,26 @@ export function EditItemDialog({
             <FieldLabel htmlFor={`edit-item-quantity-${item.id}`}>
               {t('shoppingLists.form.quantity')}
             </FieldLabel>
-            <Input
+            <NumberInput
               id={`edit-item-quantity-${item.id}`}
-              type="number"
-              inputMode="decimal"
-              min="0"
-              step="any"
+              min={0}
               value={quantity}
-              onChange={(e) => setQuantity(e.target.value)}
+              onChange={setQuantity}
               disabled={updateMutation.isPending}
               aria-invalid={!!error}
             />
             {error && <FieldError>{error}</FieldError>}
+          </Field>
+          <Field>
+            <FieldLabel htmlFor={`edit-item-category-${item.id}`}>
+              {t('shoppingLists.form.category')}
+            </FieldLabel>
+            <CategorySelect
+              id={`edit-item-category-${item.id}`}
+              value={category}
+              onChange={setCategory}
+              disabled={updateMutation.isPending}
+            />
           </Field>
           <DialogFooter>
             <Button
