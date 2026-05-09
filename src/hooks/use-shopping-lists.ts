@@ -1,12 +1,14 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useApi } from '@/api/api-provider'
 import { suggestionKeys } from '@/hooks/use-suggestions'
+import type { ProductCategory } from '@/hooks/use-product-suggestions'
 
 export type ShoppingListItem = {
   id: string
   name: string
   quantity: number
   checked: boolean
+  category: ProductCategory
 }
 
 export type ShoppingList = {
@@ -22,12 +24,14 @@ export type ShoppingListRequest = {
 export type CreateShoppingListItemRequest = {
   name: string
   quantity: number
+  category?: ProductCategory
 }
 
 export type UpdateShoppingListItemRequest = {
   name: string
   quantity: number
   checked: boolean
+  category?: ProductCategory
 }
 
 export const shoppingListKeys = {
@@ -103,7 +107,6 @@ export function useCreateShoppingListItem(listId: string) {
       queryClient.invalidateQueries({
         queryKey: shoppingListKeys.detail(listId),
       })
-      queryClient.invalidateQueries({ queryKey: shoppingListKeys.all })
       queryClient.invalidateQueries({ queryKey: suggestionKeys.all })
     },
   })
@@ -123,12 +126,57 @@ export function useUpdateShoppingListItem(listId: string) {
       api
         .put(`shopping-list/${listId}/item/${itemId}`, { json: body })
         .json<ShoppingListItem>(),
-    onSuccess: () => {
+    onMutate: async ({ itemId, body }) => {
+      const detailKey = shoppingListKeys.detail(listId)
+      await queryClient.cancelQueries({ queryKey: detailKey })
+      const previous = queryClient.getQueryData<ShoppingList>(detailKey)
+      queryClient.setQueryData<ShoppingList>(detailKey, (prev) =>
+        prev
+          ? {
+              ...prev,
+              items: prev.items.map((i) =>
+                i.id === itemId
+                  ? {
+                      ...i,
+                      name: body.name,
+                      quantity: body.quantity,
+                      checked: body.checked,
+                      category: body.category ?? i.category,
+                    }
+                  : i,
+              ),
+            }
+          : prev,
+      )
+      return { previous }
+    },
+    onError: (_err, _vars, context) => {
+      if (context?.previous) {
+        queryClient.setQueryData(
+          shoppingListKeys.detail(listId),
+          context.previous,
+        )
+      }
+    },
+    onSuccess: (updated) => {
+      queryClient.setQueryData<ShoppingList>(
+        shoppingListKeys.detail(listId),
+        (prev) =>
+          prev
+            ? {
+                ...prev,
+                items: prev.items.map((i) =>
+                  i.id === updated.id ? updated : i,
+                ),
+              }
+            : prev,
+      )
+    },
+    onSettled: () => {
       queryClient.invalidateQueries({
-        queryKey: shoppingListKeys.detail(listId),
+        queryKey: suggestionKeys.all,
+        refetchType: 'none',
       })
-      queryClient.invalidateQueries({ queryKey: shoppingListKeys.all })
-      queryClient.invalidateQueries({ queryKey: suggestionKeys.all })
     },
   })
 }
@@ -139,12 +187,30 @@ export function useDeleteShoppingListItem(listId: string) {
   return useMutation({
     mutationFn: (itemId: string) =>
       api.delete(`shopping-list/${listId}/item/${itemId}`),
-    onSuccess: () => {
+    onMutate: async (itemId) => {
+      const detailKey = shoppingListKeys.detail(listId)
+      await queryClient.cancelQueries({ queryKey: detailKey })
+      const previous = queryClient.getQueryData<ShoppingList>(detailKey)
+      queryClient.setQueryData<ShoppingList>(detailKey, (prev) =>
+        prev
+          ? { ...prev, items: prev.items.filter((i) => i.id !== itemId) }
+          : prev,
+      )
+      return { previous }
+    },
+    onError: (_err, _vars, context) => {
+      if (context?.previous) {
+        queryClient.setQueryData(
+          shoppingListKeys.detail(listId),
+          context.previous,
+        )
+      }
+    },
+    onSettled: () => {
       queryClient.invalidateQueries({
-        queryKey: shoppingListKeys.detail(listId),
+        queryKey: suggestionKeys.all,
+        refetchType: 'none',
       })
-      queryClient.invalidateQueries({ queryKey: shoppingListKeys.all })
-      queryClient.invalidateQueries({ queryKey: suggestionKeys.all })
     },
   })
 }
