@@ -8,11 +8,13 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Field, FieldError, FieldLabel } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
 import { Spinner } from '@/components/ui/spinner'
+import { SuggestionsPopup } from '@/components/shopping-lists/suggestions-popup'
 import { useCreateShoppingListItem } from '@/hooks/use-shopping-lists'
 import { useSuggestions } from '@/hooks/use-suggestions'
 import type { SuggestedProduct } from '@/hooks/use-suggestions'
 
 const personalScopeType = 'PERSONAL'
+const maxSuggestions = 5
 
 export function AddItemForm({ listId }: { listId: string }) {
   const { t } = useTranslation()
@@ -24,18 +26,21 @@ export function AddItemForm({ listId }: { listId: string }) {
   const [inputFocused, setInputFocused] = useState(false)
   const createMutation = useCreateShoppingListItem(listId)
   const suggestionsQuery = useSuggestions(personalScopeType, scopeReferenceId)
-  const searchTerm = normalizeSearch(name)
 
-  const matchingSuggestions = useMemo(
-    () =>
-      (suggestionsQuery.data ?? [])
-        .filter((product) => matchesProduct(product, searchTerm))
-        .slice(0, 5),
-    [suggestionsQuery.data, searchTerm],
-  )
+  const matchingSuggestions = useMemo(() => {
+    const term = normalize(name)
+    return (suggestionsQuery.data ?? [])
+      .filter(
+        (product) =>
+          !term ||
+          normalize(product.displayName).includes(term) ||
+          normalize(product.productKey).includes(term),
+      )
+      .slice(0, maxSuggestions)
+  }, [suggestionsQuery.data, name])
 
-  const showPopup =
-    inputFocused && Boolean(scopeReferenceId) && matchingSuggestions.length > 0
+  const showSuggestions =
+    inputFocused && !!scopeReferenceId && matchingSuggestions.length > 0
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -61,13 +66,13 @@ export function AddItemForm({ listId }: { listId: string }) {
     )
   }
 
-  function addMatchedProduct(product: SuggestedProduct) {
-    const itemName = product.displayName.trim()
-    const itemQuantity = product.suggestedQuantity ?? 1
-
+  function selectSuggestion(product: SuggestedProduct) {
     setError(null)
     createMutation.mutate(
-      { name: itemName, quantity: itemQuantity },
+      {
+        name: product.displayName.trim(),
+        quantity: product.suggestedQuantity ?? 1,
+      },
       {
         onSuccess: () => {
           setName('')
@@ -98,14 +103,12 @@ export function AddItemForm({ listId }: { listId: string }) {
                   placeholder={t('shoppingLists.form.itemNamePlaceholder')}
                   disabled={createMutation.isPending}
                 />
-                {showPopup && (
-                  <div className="absolute left-0 right-0 top-[calc(100%+0.25rem)] z-20 rounded-lg border bg-popover p-2 text-popover-foreground shadow-md">
-                    <ProductMatches
-                      suggestions={matchingSuggestions}
-                      isPending={createMutation.isPending}
-                      onSelect={addMatchedProduct}
-                    />
-                  </div>
+                {showSuggestions && (
+                  <SuggestionsPopup
+                    suggestions={matchingSuggestions}
+                    isPending={createMutation.isPending}
+                    onSelect={selectSuggestion}
+                  />
                 )}
               </div>
             </Field>
@@ -139,83 +142,6 @@ export function AddItemForm({ listId }: { listId: string }) {
   )
 }
 
-function ProductMatches({
-  suggestions,
-  isPending,
-  onSelect,
-}: {
-  suggestions: Array<SuggestedProduct>
-  isPending: boolean
-  onSelect: (product: SuggestedProduct) => void
-}) {
-  const { t } = useTranslation()
-
-  return (
-    <div className="flex flex-col gap-2">
-      <ProductMatchGroup
-        label={t('shoppingLists.suggestions.title')}
-        products={suggestions}
-        isPending={isPending}
-        onSelect={onSelect}
-      />
-    </div>
-  )
-}
-
-function ProductMatchGroup({
-  label,
-  products,
-  isPending,
-  onSelect,
-}: {
-  label: string
-  products: Array<SuggestedProduct>
-  isPending: boolean
-  onSelect: (product: SuggestedProduct) => void
-}) {
-  return (
-    <div className="flex flex-col gap-1">
-      <div className="flex items-center gap-1.5 px-2 text-xs font-medium text-muted-foreground">
-        {label}
-      </div>
-      {products.map((product) => (
-        <button
-          key={productKey(product)}
-          type="button"
-          className="flex w-full items-center justify-between gap-3 rounded-md px-2 py-2 text-left text-sm hover:bg-muted disabled:opacity-50"
-          disabled={isPending}
-          onMouseDown={(event) => {
-            event.preventDefault()
-            onSelect(product)
-          }}
-        >
-          <span className="min-w-0">
-            <span className="block truncate font-medium">
-              {product.displayName}
-            </span>
-          </span>
-          <Plus className="size-4 shrink-0" />
-        </button>
-      ))}
-    </div>
-  )
-}
-
-function matchesProduct(product: SuggestedProduct, searchTerm: string) {
-  if (!searchTerm) {
-    return true
-  }
-
-  return (
-    normalizeSearch(product.displayName).includes(searchTerm) ||
-    normalizeSearch(product.productKey).includes(searchTerm)
-  )
-}
-
-function productKey(product: SuggestedProduct) {
-  return `suggestion-${product.productKey}`
-}
-
-function normalizeSearch(value: string) {
+function normalize(value: string) {
   return value.trim().toLowerCase().replace(/\s+/g, ' ')
 }

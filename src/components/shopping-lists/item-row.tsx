@@ -33,7 +33,7 @@ export function ItemRow({
   const [editOpen, setEditOpen] = useState(false)
   const updateMutation = useUpdateShoppingListItem(listId)
   const deleteMutation = useDeleteShoppingListItem(listId)
-  const createPinnedProduct = useCreatePinnedProduct(
+  const pinMutation = useCreatePinnedProduct(
     personalScopeType,
     scopeReferenceId,
   )
@@ -41,12 +41,13 @@ export function ItemRow({
     personalScopeType,
     scopeReferenceId,
   )
-  const normalizedItemName = normalizeProductKey(item.name)
+
+  const itemKey = normalize(item.name)
   const isPinned =
     pinnedProductsQuery.data?.some(
       (product) =>
-        product.productKey === normalizedItemName ||
-        normalizeProductKey(product.displayName) === normalizedItemName,
+        product.productKey === itemKey ||
+        normalize(product.displayName) === itemKey,
     ) ?? false
 
   function toggleChecked(next: boolean) {
@@ -57,7 +58,7 @@ export function ItemRow({
   }
 
   function pinItem() {
-    createPinnedProduct.mutate({
+    pinMutation.mutate({
       displayName: item.name,
       defaultQuantity: item.quantity,
     })
@@ -101,12 +102,10 @@ export function ItemRow({
             variant={isPinned ? 'secondary' : 'ghost'}
             size="icon-sm"
             onClick={pinItem}
-            disabled={
-              !scopeReferenceId || isPinned || createPinnedProduct.isPending
-            }
+            disabled={!scopeReferenceId || isPinned || pinMutation.isPending}
             aria-label={t('shoppingLists.actions.pin')}
           >
-            {createPinnedProduct.isPending ? <Spinner /> : <Pin />}
+            {pinMutation.isPending ? <Spinner /> : <Pin />}
           </Button>
           <Button
             variant="ghost"
@@ -130,6 +129,6 @@ export function ItemRow({
   )
 }
 
-function normalizeProductKey(value: string) {
+function normalize(value: string) {
   return value.trim().toLowerCase().replace(/\s+/g, ' ')
 }
