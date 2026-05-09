@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useApi } from '@/api/api-provider'
+import { suggestionKeys } from '@/hooks/use-suggestions'
 
 export type ShoppingListItem = {
   id: string
@@ -103,6 +104,7 @@ export function useCreateShoppingListItem(listId: string) {
         queryKey: shoppingListKeys.detail(listId),
       })
       queryClient.invalidateQueries({ queryKey: shoppingListKeys.all })
+      queryClient.invalidateQueries({ queryKey: suggestionKeys.all })
     },
   })
 }
@@ -126,6 +128,7 @@ export function useUpdateShoppingListItem(listId: string) {
         queryKey: shoppingListKeys.detail(listId),
       })
       queryClient.invalidateQueries({ queryKey: shoppingListKeys.all })
+      queryClient.invalidateQueries({ queryKey: suggestionKeys.all })
     },
   })
 }
@@ -141,6 +144,7 @@ export function useDeleteShoppingListItem(listId: string) {
         queryKey: shoppingListKeys.detail(listId),
       })
       queryClient.invalidateQueries({ queryKey: shoppingListKeys.all })
+      queryClient.invalidateQueries({ queryKey: suggestionKeys.all })
     },
   })
 }
