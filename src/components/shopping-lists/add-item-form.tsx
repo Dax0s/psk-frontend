@@ -1,7 +1,6 @@
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Plus } from 'lucide-react'
-import { useAuth } from 'react-oidc-context'
 
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
@@ -13,34 +12,25 @@ import { useCreateShoppingListItem } from '@/hooks/use-shopping-lists'
 import { useSuggestions } from '@/hooks/use-suggestions'
 import type { SuggestedProduct } from '@/hooks/use-suggestions'
 
-const personalScopeType = 'PERSONAL'
 const maxSuggestions = 5
 
 export function AddItemForm({ listId }: { listId: string }) {
   const { t } = useTranslation()
-  const auth = useAuth()
-  const scopeReferenceId = auth.user?.profile.sub ?? ''
   const [name, setName] = useState('')
   const [quantity, setQuantity] = useState('1')
   const [error, setError] = useState<string | null>(null)
   const [inputFocused, setInputFocused] = useState(false)
   const createMutation = useCreateShoppingListItem(listId)
-  const suggestionsQuery = useSuggestions(personalScopeType, scopeReferenceId)
+  const suggestionsQuery = useSuggestions()
 
   const matchingSuggestions = useMemo(() => {
     const term = normalize(name)
     return (suggestionsQuery.data ?? [])
-      .filter(
-        (product) =>
-          !term ||
-          normalize(product.displayName).includes(term) ||
-          normalize(product.productKey).includes(term),
-      )
+      .filter((product) => !term || normalize(product.name).includes(term))
       .slice(0, maxSuggestions)
   }, [suggestionsQuery.data, name])
 
-  const showSuggestions =
-    inputFocused && !!scopeReferenceId && matchingSuggestions.length > 0
+  const showSuggestions = inputFocused && matchingSuggestions.length > 0
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -70,8 +60,8 @@ export function AddItemForm({ listId }: { listId: string }) {
     setError(null)
     createMutation.mutate(
       {
-        name: product.displayName.trim(),
-        quantity: product.suggestedQuantity ?? 1,
+        name: product.name.trim(),
+        quantity: product.suggestedQuantity,
       },
       {
         onSuccess: () => {

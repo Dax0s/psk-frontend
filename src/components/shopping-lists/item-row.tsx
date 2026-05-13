@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Pencil, Pin, Trash2 } from 'lucide-react'
-import { useAuth } from 'react-oidc-context'
 
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
@@ -18,8 +17,6 @@ import {
   usePinnedProducts,
 } from '@/hooks/use-suggestions'
 
-const personalScopeType = 'PERSONAL'
-
 export function ItemRow({
   listId,
   item,
@@ -28,26 +25,16 @@ export function ItemRow({
   item: ShoppingListItem
 }) {
   const { t } = useTranslation()
-  const auth = useAuth()
-  const scopeReferenceId = auth.user?.profile.sub ?? ''
   const [editOpen, setEditOpen] = useState(false)
   const updateMutation = useUpdateShoppingListItem(listId)
   const deleteMutation = useDeleteShoppingListItem(listId)
-  const pinMutation = useCreatePinnedProduct(
-    personalScopeType,
-    scopeReferenceId,
-  )
-  const pinnedProductsQuery = usePinnedProducts(
-    personalScopeType,
-    scopeReferenceId,
-  )
+  const pinMutation = useCreatePinnedProduct()
+  const pinnedProductsQuery = usePinnedProducts()
 
   const itemKey = normalize(item.name)
   const isPinned =
     pinnedProductsQuery.data?.some(
-      (product) =>
-        product.productKey === itemKey ||
-        normalize(product.displayName) === itemKey,
+      (product) => normalize(product.name) === itemKey,
     ) ?? false
 
   function toggleChecked(next: boolean) {
@@ -59,7 +46,7 @@ export function ItemRow({
 
   function pinItem() {
     pinMutation.mutate({
-      displayName: item.name,
+      name: item.name,
       defaultQuantity: item.quantity,
     })
   }
@@ -102,7 +89,7 @@ export function ItemRow({
             variant={isPinned ? 'secondary' : 'ghost'}
             size="icon-sm"
             onClick={pinItem}
-            disabled={!scopeReferenceId || isPinned || pinMutation.isPending}
+            disabled={isPinned || pinMutation.isPending}
             aria-label={t('shoppingLists.actions.pin')}
           >
             {pinMutation.isPending ? <Spinner /> : <Pin />}

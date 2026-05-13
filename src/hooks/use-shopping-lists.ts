@@ -124,7 +124,7 @@ export function useCreateShoppingListItem(listId: string) {
         queryKey: shoppingListKeys.detail(listId),
       })
       queryClient.invalidateQueries({ queryKey: shoppingListKeys.all })
-      queryClient.invalidateQueries({ queryKey: suggestionKeys.all })
+      queryClient.invalidateQueries({ queryKey: suggestionKeys.suggestions })
     },
   })
 }
@@ -148,7 +148,7 @@ export function useUpdateShoppingListItem(listId: string) {
         queryKey: shoppingListKeys.detail(listId),
       })
       queryClient.invalidateQueries({ queryKey: shoppingListKeys.all })
-      queryClient.invalidateQueries({ queryKey: suggestionKeys.all })
+      queryClient.invalidateQueries({ queryKey: suggestionKeys.suggestions })
     },
   })
 }
@@ -164,7 +164,7 @@ export function useDeleteShoppingListItem(listId: string) {
         queryKey: shoppingListKeys.detail(listId),
       })
       queryClient.invalidateQueries({ queryKey: shoppingListKeys.all })
-      queryClient.invalidateQueries({ queryKey: suggestionKeys.all })
+      queryClient.invalidateQueries({ queryKey: suggestionKeys.suggestions })
     },
   })
 }

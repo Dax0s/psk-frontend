@@ -1,115 +1,90 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useApi } from '@/api/api-provider'
 
-export type SuggestionScopeType = 'PERSONAL' | 'FAMILY'
+export type ProductCategory =
+  | 'DAIRY_AND_EGGS'
+  | 'MEAT'
+  | 'FISH'
+  | 'FRUITS_AND_VEGETABLES'
+  | 'GROCERIES'
+  | 'SWEETS'
+  | 'CONFECTIONERY'
+  | 'BEVERAGES'
+  | 'COFFEE_TEA'
+  | 'FROZEN'
+  | 'CANNED'
+  | 'PREPARED_FOODS'
+  | 'BABY'
+  | 'COSMETICS'
+  | 'HOUSEHOLD_CHEMICALS'
+  | 'INDUSTRIAL'
+  | 'PLANTS'
+  | 'OTHER'
 
 export type SuggestedProduct = {
-  productKey: string
-  displayName: string
-  suggestedQuantity: number | null
-  unit: string | null
+  name: string
+  suggestedQuantity: number
   entryCount: number
-  lastEnteredAt: string
+  category: ProductCategory
 }
 
 export type PinnedProduct = {
-  id: number
-  scopeType: SuggestionScopeType
-  scopeReferenceId: string
-  productKey: string
-  displayName: string
+  id: string
+  name: string
   defaultQuantity: number | null
-  unit: string | null
   sortOrder: number
-  createdAt: string
-  updatedAt: string
+  category: ProductCategory
 }
 
-export type UpsertPinnedProductRequest = {
-  displayName: string
-  productKey?: string
+export type CreatePinnedProductRequest = {
+  name: string
   defaultQuantity?: number | null
-  unit?: string | null
   sortOrder?: number | null
+  category?: ProductCategory | null
 }
 
-const scopePath = (scopeType: SuggestionScopeType, scopeReferenceId: string) =>
-  `v1/suggestion-scopes/${scopeType}/${scopeReferenceId}`
+export type UpdatePinnedProductRequest = {
+  name: string
+  defaultQuantity?: number | null
+  sortOrder: number
+  category?: ProductCategory | null
+}
 
 export const suggestionKeys = {
-  all: ['suggestion-scope'] as const,
-  scope: (scopeType: SuggestionScopeType, scopeReferenceId: string) =>
-    [...suggestionKeys.all, scopeType, scopeReferenceId] as const,
-  suggestions: (scopeType: SuggestionScopeType, scopeReferenceId: string) =>
-    [
-      ...suggestionKeys.scope(scopeType, scopeReferenceId),
-      'suggestions',
-    ] as const,
-  pinnedProducts: (scopeType: SuggestionScopeType, scopeReferenceId: string) =>
-    [
-      ...suggestionKeys.scope(scopeType, scopeReferenceId),
-      'pinned-products',
-    ] as const,
+  suggestions: ['suggestions'] as const,
+  pinnedProducts: ['pinned-products'] as const,
 }
 
-export function useSuggestions(
-  scopeType: SuggestionScopeType,
-  scopeReferenceId: string,
-) {
+export function useSuggestions() {
   const api = useApi()
   return useQuery({
-    queryKey: suggestionKeys.suggestions(scopeType, scopeReferenceId),
-    queryFn: () =>
-      api
-        .get(`${scopePath(scopeType, scopeReferenceId)}/suggestions`)
-        .json<Array<SuggestedProduct>>(),
-    enabled: !!scopeReferenceId,
+    queryKey: suggestionKeys.suggestions,
+    queryFn: () => api.get('suggestion').json<Array<SuggestedProduct>>(),
   })
 }
 
-export function usePinnedProducts(
-  scopeType: SuggestionScopeType,
-  scopeReferenceId: string,
-) {
+export function usePinnedProducts() {
   const api = useApi()
   return useQuery({
-    queryKey: suggestionKeys.pinnedProducts(scopeType, scopeReferenceId),
-    queryFn: () =>
-      api
-        .get(`${scopePath(scopeType, scopeReferenceId)}/pinned-products`)
-        .json<Array<PinnedProduct>>(),
-    enabled: !!scopeReferenceId,
+    queryKey: suggestionKeys.pinnedProducts,
+    queryFn: () => api.get('pinned-product').json<Array<PinnedProduct>>(),
   })
 }
 
-export function useCreatePinnedProduct(
-  scopeType: SuggestionScopeType,
-  scopeReferenceId: string,
-) {
+export function useCreatePinnedProduct() {
   const api = useApi()
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: (body: UpsertPinnedProductRequest) =>
-      api
-        .post(`${scopePath(scopeType, scopeReferenceId)}/pinned-products`, {
-          json: body,
-        })
-        .json<PinnedProduct>(),
+    mutationFn: (body: CreatePinnedProductRequest) =>
+      api.post('pinned-product', { json: body }).json<PinnedProduct>(),
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: suggestionKeys.pinnedProducts(scopeType, scopeReferenceId),
-      })
-      queryClient.invalidateQueries({
-        queryKey: suggestionKeys.suggestions(scopeType, scopeReferenceId),
-      })
+      queryClient.invalidateQueries({ queryKey: suggestionKeys.pinnedProducts })
+      queryClient.invalidateQueries({ queryKey: suggestionKeys.suggestions })
     },
   })
 }
 
-export function useUpdatePinnedProduct(
-  scopeType: SuggestionScopeType,
-  scopeReferenceId: string,
-) {
+export function useUpdatePinnedProduct() {
   const api = useApi()
   const queryClient = useQueryClient()
   return useMutation({
@@ -117,46 +92,24 @@ export function useUpdatePinnedProduct(
       id,
       body,
     }: {
-      id: number
-      body: UpsertPinnedProductRequest
-    }) =>
-      api
-        .put(
-          `${scopePath(scopeType, scopeReferenceId)}/pinned-products/${id}`,
-          {
-            json: body,
-          },
-        )
-        .json<PinnedProduct>(),
+      id: string
+      body: UpdatePinnedProductRequest
+    }) => api.put(`pinned-product/${id}`, { json: body }).json<PinnedProduct>(),
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: suggestionKeys.pinnedProducts(scopeType, scopeReferenceId),
-      })
-      queryClient.invalidateQueries({
-        queryKey: suggestionKeys.suggestions(scopeType, scopeReferenceId),
-      })
+      queryClient.invalidateQueries({ queryKey: suggestionKeys.pinnedProducts })
+      queryClient.invalidateQueries({ queryKey: suggestionKeys.suggestions })
     },
   })
 }
 
-export function useDeletePinnedProduct(
-  scopeType: SuggestionScopeType,
-  scopeReferenceId: string,
-) {
+export function useDeletePinnedProduct() {
   const api = useApi()
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: (id: number) =>
-      api.delete(
-        `${scopePath(scopeType, scopeReferenceId)}/pinned-products/${id}`,
-      ),
+    mutationFn: (id: string) => api.delete(`pinned-product/${id}`),
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: suggestionKeys.pinnedProducts(scopeType, scopeReferenceId),
-      })
-      queryClient.invalidateQueries({
-        queryKey: suggestionKeys.suggestions(scopeType, scopeReferenceId),
-      })
+      queryClient.invalidateQueries({ queryKey: suggestionKeys.pinnedProducts })
+      queryClient.invalidateQueries({ queryKey: suggestionKeys.suggestions })
     },
   })
 }

@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Pin } from 'lucide-react'
-import { useAuth } from 'react-oidc-context'
 
 import {
   Card,
@@ -21,23 +20,17 @@ import {
 } from '@/hooks/use-suggestions'
 import type { PinnedProduct } from '@/hooks/use-suggestions'
 
-const personalScopeType = 'PERSONAL'
 const pageSize = 10
 
 export function PinnedProductsPanel({ listId }: { listId: string }) {
   const { t } = useTranslation()
-  const auth = useAuth()
-  const scopeReferenceId = auth.user?.profile.sub ?? ''
   const [page, setPage] = useState(0)
-  const [movingIds, setMovingIds] = useState<Set<number>>(() => new Set())
+  const [movingIds, setMovingIds] = useState<Set<string>>(() => new Set())
 
-  const pinnedProductsQuery = usePinnedProducts(
-    personalScopeType,
-    scopeReferenceId,
-  )
+  const pinnedProductsQuery = usePinnedProducts()
   const createItem = useCreateShoppingListItem(listId)
-  const deletePin = useDeletePinnedProduct(personalScopeType, scopeReferenceId)
-  const updatePin = useUpdatePinnedProduct(personalScopeType, scopeReferenceId)
+  const deletePin = useDeletePinnedProduct()
+  const updatePin = useUpdatePinnedProduct()
 
   const pinnedProducts = pinnedProductsQuery.data ?? []
   const totalPages = Math.max(1, Math.ceil(pinnedProducts.length / pageSize))
@@ -49,15 +42,13 @@ export function PinnedProductsPanel({ listId }: { listId: string }) {
   )
 
   function addToList(product: PinnedProduct, quantity: number) {
-    createItem.mutate({ name: product.displayName, quantity })
+    createItem.mutate({ name: product.name, quantity })
   }
 
   function changeQuantity(product: PinnedProduct, quantity: number) {
     updatePin.mutate({
       id: product.id,
-      body: pinnedProductRequest(product, {
-        defaultQuantity: quantity,
-      }),
+      body: pinnedProductUpdate(product, { defaultQuantity: quantity }),
     })
   }
 
@@ -82,11 +73,11 @@ export function PinnedProductsPanel({ listId }: { listId: string }) {
     try {
       await updatePin.mutateAsync({
         id: product.id,
-        body: pinnedProductRequest(product, { sortOrder: nextProductOrder }),
+        body: pinnedProductUpdate(product, { sortOrder: nextProductOrder }),
       })
       await updatePin.mutateAsync({
         id: target.id,
-        body: pinnedProductRequest(target, { sortOrder: nextTargetOrder }),
+        body: pinnedProductUpdate(target, { sortOrder: nextTargetOrder }),
       })
     } finally {
       setMovingIds(new Set())
@@ -150,11 +141,11 @@ function PinnedProductsBody({
   firstVisibleIndex: number
   totalProductCount: number
   adding: boolean
-  deletingId?: number
-  updatingId?: number
-  movingIds: Set<number>
+  deletingId?: string
+  updatingId?: string
+  movingIds: Set<string>
   onAdd: (product: PinnedProduct, quantity: number) => void
-  onDelete: (id: number) => void
+  onDelete: (id: string) => void
   onQuantityChange: (product: PinnedProduct, quantity: number) => void
   onMove: (product: PinnedProduct, direction: -1 | 1) => void
 }) {
@@ -209,15 +200,14 @@ function PinnedProductsBody({
   )
 }
 
-function pinnedProductRequest(
+function pinnedProductUpdate(
   product: PinnedProduct,
   overrides: { defaultQuantity?: number; sortOrder?: number },
 ) {
   return {
-    displayName: product.displayName,
-    productKey: product.productKey,
+    name: product.name,
     defaultQuantity: overrides.defaultQuantity ?? product.defaultQuantity,
-    unit: product.unit,
     sortOrder: overrides.sortOrder ?? product.sortOrder,
+    category: product.category,
   }
 }

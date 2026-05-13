@@ -21,7 +21,7 @@ export function SuggestionsPopup({
       </div>
       {suggestions.map((product) => (
         <button
-          key={product.productKey}
+          key={product.name}
           type="button"
           className="flex w-full items-center justify-between gap-3 rounded-md px-2 py-2 text-left text-sm hover:bg-muted disabled:opacity-50"
           disabled={isPending}
@@ -30,9 +30,7 @@ export function SuggestionsPopup({
             onSelect(product)
           }}
         >
-          <span className="block truncate font-medium">
-            {product.displayName}
-          </span>
+          <span className="block truncate font-medium">{product.name}</span>
           <Plus className="size-4 shrink-0" />
         </button>
       ))}

@@ -29,7 +29,7 @@ export function PinnedProductRow({
   canMoveUp: boolean
   canMoveDown: boolean
   onAdd: (product: PinnedProduct, quantity: number) => void
-  onDelete: (id: number) => void
+  onDelete: (id: string) => void
   onQuantityChange: (product: PinnedProduct, quantity: number) => void
   onMove: (product: PinnedProduct, direction: -1 | 1) => void
 }) {
@@ -58,15 +58,18 @@ export function PinnedProductRow({
 
   return (
     <Card size="sm">
-      <CardContent className="flex items-center gap-2">
-        <div className="flex flex-col">
+      <CardContent className="flex flex-col gap-2">
+        <p className="text-sm font-medium break-words" title={product.name}>
+          {product.name}
+        </p>
+        <div className="flex items-center gap-1">
           <Button
             variant="ghost"
             size="icon-xs"
             onClick={() => onMove(product, -1)}
             disabled={!canMoveUp || moving}
             aria-label={t('shoppingLists.pins.moveUpLabel', {
-              name: product.displayName,
+              name: product.name,
             })}
           >
             {moving ? <Spinner /> : <ArrowUp />}
@@ -77,59 +80,51 @@ export function PinnedProductRow({
             onClick={() => onMove(product, 1)}
             disabled={!canMoveDown || moving}
             aria-label={t('shoppingLists.pins.moveDownLabel', {
-              name: product.displayName,
+              name: product.name,
             })}
           >
             <ArrowDown />
           </Button>
+          <Input
+            type="number"
+            min="0"
+            step="any"
+            inputMode="decimal"
+            value={quantity}
+            onChange={(e) => setQuantity(e.target.value)}
+            onBlur={saveQuantity}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') e.currentTarget.blur()
+            }}
+            disabled={updating}
+            aria-label={t('shoppingLists.pins.quantityLabel', {
+              name: product.name,
+            })}
+            className="h-7 flex-1 min-w-0 px-2 text-sm"
+          />
+          <Button
+            variant="ghost"
+            size="icon-sm"
+            onClick={addToList}
+            disabled={adding || parsedQuantity === null}
+            aria-label={t('shoppingLists.pins.addLabel', {
+              name: product.name,
+            })}
+          >
+            {adding ? <Spinner /> : <Plus />}
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon-sm"
+            onClick={() => onDelete(product.id)}
+            disabled={deleting}
+            aria-label={t('shoppingLists.pins.deleteLabel', {
+              name: product.name,
+            })}
+          >
+            {deleting ? <Spinner /> : <Trash2 />}
+          </Button>
         </div>
-        <div className="flex-1 min-w-0">
-          <p className="truncate text-sm font-medium">{product.displayName}</p>
-          {product.unit && (
-            <p className="truncate text-xs text-muted-foreground">
-              {product.unit}
-            </p>
-          )}
-        </div>
-        <Input
-          type="number"
-          min="0"
-          step="any"
-          inputMode="decimal"
-          value={quantity}
-          onChange={(e) => setQuantity(e.target.value)}
-          onBlur={saveQuantity}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') e.currentTarget.blur()
-          }}
-          disabled={updating}
-          aria-label={t('shoppingLists.pins.quantityLabel', {
-            name: product.displayName,
-          })}
-          className="h-7 w-16 px-2 text-sm"
-        />
-        <Button
-          variant="ghost"
-          size="icon-sm"
-          onClick={addToList}
-          disabled={adding || parsedQuantity === null}
-          aria-label={t('shoppingLists.pins.addLabel', {
-            name: product.displayName,
-          })}
-        >
-          {adding ? <Spinner /> : <Plus />}
-        </Button>
-        <Button
-          variant="ghost"
-          size="icon-sm"
-          onClick={() => onDelete(product.id)}
-          disabled={deleting}
-          aria-label={t('shoppingLists.pins.deleteLabel', {
-            name: product.displayName,
-          })}
-        >
-          {deleting ? <Spinner /> : <Trash2 />}
-        </Button>
       </CardContent>
     </Card>
   )
