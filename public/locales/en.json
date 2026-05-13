@@ -1,6 +1,8 @@
 {
   "navbar": {
     "title": "App",
+    "shoppingLists": "Shopping lists",
+    "families": "Families",
     "user": {
       "theme": "Theme",
       "light": "Light",
@@ -22,6 +24,68 @@
     "title": "Page not found",
     "message": "The page you're looking for doesn't exist or has been moved.",
     "goHome": "Go home"
+  },
+  "families": {
+    "title": "Families",
+    "description": "Create a family or join one with an invite code.",
+    "empty": "You're not in any families yet.",
+    "loadError": "Failed to load families.",
+    "admin": "Admin",
+    "you": "(you)",
+    "inviteCode": "Invite code",
+    "shareHint": "Share this code so others can join.",
+    "members": "Members",
+    "memberCount_one": "{{count}} member",
+    "memberCount_other": "{{count}} members",
+    "joinedAgo": "Joined {{time}}",
+    "groceryLists": "Grocery lists",
+    "noGroceryLists": "No grocery lists yet.",
+    "groceryListsLoadError": "Failed to load grocery lists.",
+    "actions": {
+      "create": "Create",
+      "join": "Join",
+      "cancel": "Cancel",
+      "delete": "Delete",
+      "leave": "Leave",
+      "remove": "Remove",
+      "copyCode": "Copy invite code"
+    },
+    "form": {
+      "name": "Family name",
+      "namePlaceholder": "e.g. Smiths",
+      "nameRequired": "Name is required",
+      "createError": "Failed to create the family.",
+      "inviteCode": "Invite code",
+      "inviteCodePlaceholder": "e.g. A3F9K2",
+      "codeInvalid": "Invite code must be 6 characters.",
+      "joinError": "Failed to join the family.",
+      "alreadyMember": "You are already a member of this family.",
+      "familyNotFound": "Family not found. Check the invite code."
+    },
+    "create": {
+      "title": "Create family",
+      "description": "Start a new family and invite others with the generated code."
+    },
+    "join": {
+      "title": "Join family",
+      "description": "Enter the invite code shared with you."
+    },
+    "delete": {
+      "title": "Delete family",
+      "description": "Are you sure you want to delete \"{{name}}\"? This will remove all members and cannot be undone."
+    },
+    "leave": {
+      "title": "Leave family",
+      "description": "Are you sure you want to leave \"{{name}}\"?"
+    },
+    "removeMember": {
+      "title": "Remove member",
+      "description": "Remove {{name}} from the family?"
+    },
+    "detail": {
+      "back": "Back to families",
+      "loadError": "Failed to load this family."
+    }
   },
   "shoppingLists": {
     "title": "Shopping lists",
@@ -82,6 +146,8 @@
     },
     "pins": {
       "title": "Pins",
+      "show": "Show pinned products",
+      "hide": "Hide pinned products",
       "previous": "Previous pinned products",
       "next": "Next pinned products",
       "pageLabel": "Pinned products page {{page}}",

@@ -1,6 +1,8 @@
 {
   "navbar": {
     "title": "Programa",
+    "shoppingLists": "Pirkinių sąrašai",
+    "families": "Šeimos",
     "user": {
       "theme": "Tema",
       "light": "Šviesi",
@@ -22,6 +24,70 @@
     "title": "Puslapis nerastas",
     "message": "Ieškomas puslapis neegzistuoja arba buvo perkeltas.",
     "goHome": "Į pradžią"
+  },
+  "families": {
+    "title": "Šeimos",
+    "description": "Sukurkite šeimą arba prisijunkite su pakvietimo kodu.",
+    "empty": "Dar nepriklausote jokiai šeimai.",
+    "loadError": "Nepavyko įkelti šeimų.",
+    "admin": "Administratorius",
+    "you": "(tu)",
+    "inviteCode": "Pakvietimo kodas",
+    "shareHint": "Pasidalinkite šiuo kodu, kad kiti galėtų prisijungti.",
+    "members": "Nariai",
+    "memberCount_one": "{{count}} narys",
+    "memberCount_few": "{{count}} nariai",
+    "memberCount_many": "{{count}} narių",
+    "memberCount_other": "{{count}} narių",
+    "joinedAgo": "Prisijungė {{time}}",
+    "groceryLists": "Pirkinių sąrašai",
+    "noGroceryLists": "Pirkinių sąrašų dar nėra.",
+    "groceryListsLoadError": "Nepavyko įkelti pirkinių sąrašų.",
+    "actions": {
+      "create": "Sukurti",
+      "join": "Prisijungti",
+      "cancel": "Atšaukti",
+      "delete": "Ištrinti",
+      "leave": "Palikti",
+      "remove": "Pašalinti",
+      "copyCode": "Kopijuoti pakvietimo kodą"
+    },
+    "form": {
+      "name": "Šeimos pavadinimas",
+      "namePlaceholder": "pvz. Smitai",
+      "nameRequired": "Pavadinimas privalomas",
+      "createError": "Nepavyko sukurti šeimos.",
+      "inviteCode": "Pakvietimo kodas",
+      "inviteCodePlaceholder": "pvz. A3F9K2",
+      "codeInvalid": "Pakvietimo kodą turi sudaryti 6 simboliai.",
+      "joinError": "Nepavyko prisijungti prie šeimos.",
+      "alreadyMember": "Jūs jau esate šios šeimos narys.",
+      "familyNotFound": "Šeima nerasta. Patikrinkite pakvietimo kodą."
+    },
+    "create": {
+      "title": "Sukurti šeimą",
+      "description": "Pradėkite naują šeimą ir pasikvieskite kitus su sugeneruotu kodu."
+    },
+    "join": {
+      "title": "Prisijungti prie šeimos",
+      "description": "Įveskite jums atsiųstą pakvietimo kodą."
+    },
+    "delete": {
+      "title": "Ištrinti šeimą",
+      "description": "Ar tikrai norite ištrinti „{{name}}“? Tai pašalins visus narius ir negali būti atšaukta."
+    },
+    "leave": {
+      "title": "Palikti šeimą",
+      "description": "Ar tikrai norite palikti „{{name}}“?"
+    },
+    "removeMember": {
+      "title": "Pašalinti narį",
+      "description": "Pašalinti {{name}} iš šeimos?"
+    },
+    "detail": {
+      "back": "Grįžti į šeimas",
+      "loadError": "Nepavyko įkelti šios šeimos."
+    }
   },
   "shoppingLists": {
     "title": "Pirkinių sąrašai",
@@ -82,6 +148,8 @@
     },
     "pins": {
       "title": "Prisegtos",
+      "show": "Rodyti prisegtas prekes",
+      "hide": "Slėpti prisegtas prekes",
       "previous": "Ankstesnės prisegtos prekės",
       "next": "Kitos prisegtos prekės",
       "pageLabel": "Prisegtų prekių puslapis {{page}}",

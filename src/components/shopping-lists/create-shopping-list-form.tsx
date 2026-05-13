@@ -9,7 +9,7 @@ import { Input } from '@/components/ui/input'
 import { Spinner } from '@/components/ui/spinner'
 import { useCreateShoppingList } from '@/hooks/use-shopping-lists'
 
-export function CreateShoppingListForm() {
+export function CreateShoppingListForm({ familyId }: { familyId?: string }) {
   const { t } = useTranslation()
   const [name, setName] = useState('')
   const [error, setError] = useState<string | null>(null)
@@ -23,7 +23,7 @@ export function CreateShoppingListForm() {
     }
     setError(null)
     createMutation.mutate(
-      { name: name.trim() },
+      { name: name.trim(), familyId },
       {
         onSuccess: () => setName(''),
         onError: () => setError(t('shoppingLists.form.createError')),

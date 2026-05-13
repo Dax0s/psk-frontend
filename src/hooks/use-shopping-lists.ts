@@ -15,10 +15,13 @@ export type ShoppingList = {
   id: string
   name: string
   items: Array<ShoppingListItem>
+  familyId?: string | null
+  familyName?: string | null
 }
 
 export type ShoppingListRequest = {
   name: string
+  familyId?: string
 }
 
 export type CreateShoppingListItemRequest = {
@@ -37,6 +40,8 @@ export type UpdateShoppingListItemRequest = {
 export const shoppingListKeys = {
   all: ['shopping-lists'] as const,
   detail: (id: string) => ['shopping-lists', id] as const,
+  byFamily: (familyId: string) =>
+    ['shopping-lists', 'family', familyId] as const,
 }
 
 export function useShoppingLists() {
@@ -56,14 +61,29 @@ export function useShoppingList(id: string) {
   })
 }
 
+export function useFamilyShoppingLists(familyId: string) {
+  const api = useApi()
+  return useQuery({
+    queryKey: shoppingListKeys.byFamily(familyId),
+    queryFn: () =>
+      api.get(`shopping-list/family/${familyId}`).json<Array<ShoppingList>>(),
+    enabled: !!familyId,
+  })
+}
+
 export function useCreateShoppingList() {
   const api = useApi()
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: (body: ShoppingListRequest) =>
       api.post('shopping-list', { json: body }).json<ShoppingList>(),
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: shoppingListKeys.all })
+      if (data.familyId) {
+        queryClient.invalidateQueries({
+          queryKey: shoppingListKeys.byFamily(data.familyId),
+        })
+      }
     },
   })
 }

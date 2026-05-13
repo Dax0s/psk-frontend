@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate } from '@tanstack/react-router'
+import { Link, useNavigate } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { Pencil, Trash2 } from 'lucide-react'
 
@@ -27,6 +27,15 @@ export function ShoppingListHeader({ list }: { list: ShoppingList }) {
               total: list.items.length,
             })}
           </p>
+          {list.familyId && (
+            <Link
+              to="/families/$familyId"
+              params={{ familyId: list.familyId }}
+              className="text-sm font-medium underline hover:text-foreground text-muted-foreground"
+            >
+              {list.familyName}
+            </Link>
+          )}
         </div>
         <div className="flex gap-1">
           <Button
