@@ -19,6 +19,11 @@ export type ShoppingListRequest = {
   name: string
 }
 
+export type ShoppingListFromRecipeRequest = {
+  name: string
+  link: string
+}
+
 export type CreateShoppingListItemRequest = {
   name: string
   quantity: number
@@ -60,6 +65,21 @@ export function useCreateShoppingList() {
       api.post('shopping-list', { json: body }).json<ShoppingList>(),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: shoppingListKeys.all })
+    },
+  })
+}
+
+export function useCreateShoppingListFromRecipe() {
+  const api = useApi()
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (body: ShoppingListFromRecipeRequest) =>
+      api
+        .post('shopping-list/from-recipe', { json: body, timeout: 120000 })
+        .json<ShoppingList>(),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: shoppingListKeys.all })
+      queryClient.invalidateQueries({ queryKey: suggestionKeys.all })
     },
   })
 }

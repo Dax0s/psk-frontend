@@ -53,6 +53,16 @@
       "createItemError": "Failed to add the item.",
       "updateItemError": "Failed to update the item."
     },
+    "fromRecipe": {
+      "name": "List name",
+      "namePlaceholder": "e.g. Dinner",
+      "url": "Recipe URL",
+      "urlPlaceholder": "https://...",
+      "urlRequired": "Recipe URL is required",
+      "urlInvalid": "Please enter a valid URL",
+      "generate": "Generate",
+      "createError": "Failed to generate the list from the recipe."
+    },
     "edit": {
       "title": "Edit shopping list",
       "description": "Update the name of your shopping list."

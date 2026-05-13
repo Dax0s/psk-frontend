@@ -53,6 +53,16 @@
       "createItemError": "Nepavyko pridėti prekės.",
       "updateItemError": "Nepavyko atnaujinti prekės."
     },
+    "fromRecipe": {
+      "name": "Sąrašo pavadinimas",
+      "namePlaceholder": "pvz. Vakarienė",
+      "url": "Recepto nuoroda",
+      "urlPlaceholder": "https://...",
+      "urlRequired": "Recepto nuoroda privaloma",
+      "urlInvalid": "Įveskite teisingą URL",
+      "generate": "Sugeneruoti",
+      "createError": "Nepavyko sugeneruoti sąrašo iš recepto."
+    },
     "edit": {
       "title": "Redaguoti pirkinių sąrašą",
       "description": "Atnaujinkite pirkinių sąrašo pavadinimą."
