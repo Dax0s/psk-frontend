@@ -1,25 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useApi } from '@/api/api-provider'
-
-export type ProductCategory =
-  | 'DAIRY_AND_EGGS'
-  | 'MEAT'
-  | 'FISH'
-  | 'FRUITS_AND_VEGETABLES'
-  | 'GROCERIES'
-  | 'SWEETS'
-  | 'CONFECTIONERY'
-  | 'BEVERAGES'
-  | 'COFFEE_TEA'
-  | 'FROZEN'
-  | 'CANNED'
-  | 'PREPARED_FOODS'
-  | 'BABY'
-  | 'COSMETICS'
-  | 'HOUSEHOLD_CHEMICALS'
-  | 'INDUSTRIAL'
-  | 'PLANTS'
-  | 'OTHER'
+import type { ProductCategory } from '@/hooks/use-product-suggestions'
 
 export type SuggestedProduct = {
   name: string
@@ -40,25 +21,26 @@ export type CreatePinnedProductRequest = {
   name: string
   defaultQuantity?: number | null
   sortOrder?: number | null
-  category?: ProductCategory | null
+  category?: ProductCategory
 }
 
 export type UpdatePinnedProductRequest = {
   name: string
   defaultQuantity?: number | null
   sortOrder: number
-  category?: ProductCategory | null
+  category?: ProductCategory
 }
 
 export const suggestionKeys = {
-  suggestions: ['suggestions'] as const,
-  pinnedProducts: ['pinned-products'] as const,
+  all: ['suggestion'] as const,
+  suggestions: () => [...suggestionKeys.all, 'suggestions'] as const,
+  pinnedProducts: () => [...suggestionKeys.all, 'pinned-products'] as const,
 }
 
 export function useSuggestions() {
   const api = useApi()
   return useQuery({
-    queryKey: suggestionKeys.suggestions,
+    queryKey: suggestionKeys.suggestions(),
     queryFn: () => api.get('suggestion').json<Array<SuggestedProduct>>(),
   })
 }
@@ -66,7 +48,7 @@ export function useSuggestions() {
 export function usePinnedProducts() {
   const api = useApi()
   return useQuery({
-    queryKey: suggestionKeys.pinnedProducts,
+    queryKey: suggestionKeys.pinnedProducts(),
     queryFn: () => api.get('pinned-product').json<Array<PinnedProduct>>(),
   })
 }
@@ -78,8 +60,7 @@ export function useCreatePinnedProduct() {
     mutationFn: (body: CreatePinnedProductRequest) =>
       api.post('pinned-product', { json: body }).json<PinnedProduct>(),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: suggestionKeys.pinnedProducts })
-      queryClient.invalidateQueries({ queryKey: suggestionKeys.suggestions })
+      queryClient.invalidateQueries({ queryKey: suggestionKeys.all })
     },
   })
 }
@@ -96,8 +77,9 @@ export function useUpdatePinnedProduct() {
       body: UpdatePinnedProductRequest
     }) => api.put(`pinned-product/${id}`, { json: body }).json<PinnedProduct>(),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: suggestionKeys.pinnedProducts })
-      queryClient.invalidateQueries({ queryKey: suggestionKeys.suggestions })
+      queryClient.invalidateQueries({
+        queryKey: suggestionKeys.pinnedProducts(),
+      })
     },
   })
 }
@@ -108,8 +90,7 @@ export function useDeletePinnedProduct() {
   return useMutation({
     mutationFn: (id: string) => api.delete(`pinned-product/${id}`),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: suggestionKeys.pinnedProducts })
-      queryClient.invalidateQueries({ queryKey: suggestionKeys.suggestions })
+      queryClient.invalidateQueries({ queryKey: suggestionKeys.all })
     },
   })
 }

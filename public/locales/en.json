@@ -114,6 +114,7 @@
       "quantity": "Qty",
       "quantityInvalid": "Quantity must be a number ≥ 0",
       "addItem": "Add",
+      "category": "Category",
       "createItemError": "Failed to add the item.",
       "updateItemError": "Failed to update the item."
     },
@@ -138,6 +139,11 @@
     "suggestions": {
       "title": "Suggestions"
     },
+    "productSuggestions": {
+      "title": "Maxima offers",
+      "empty": "No matching Maxima offers.",
+      "validUntil": "Until {{date}}"
+    },
     "pins": {
       "title": "Pins",
       "previous": "Previous pinned products",
@@ -151,5 +157,25 @@
       "moveUpLabel": "Move {{name}} up",
       "moveDownLabel": "Move {{name}} down"
     }
+  },
+  "productCategories": {
+    "DAIRY_AND_EGGS": "Dairy & eggs",
+    "MEAT": "Meat",
+    "FISH": "Fish",
+    "FRUITS_AND_VEGETABLES": "Fruits & vegetables",
+    "GROCERIES": "Groceries",
+    "SWEETS": "Sweets",
+    "CONFECTIONERY": "Confectionery",
+    "BEVERAGES": "Beverages",
+    "COFFEE_TEA": "Coffee, cocoa & tea",
+    "FROZEN": "Frozen food",
+    "CANNED": "Canned food",
+    "PREPARED_FOODS": "Prepared foods",
+    "BABY": "Baby & kids",
+    "COSMETICS": "Cosmetics & hygiene",
+    "HOUSEHOLD_CHEMICALS": "Household chemicals",
+    "INDUSTRIAL": "Industrial goods",
+    "PLANTS": "Plants & care",
+    "OTHER": "Other"
   }
 }

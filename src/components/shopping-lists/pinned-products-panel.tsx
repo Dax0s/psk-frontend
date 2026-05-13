@@ -20,7 +20,7 @@ import {
 } from '@/hooks/use-suggestions'
 import type { PinnedProduct } from '@/hooks/use-suggestions'
 
-const pageSize = 10
+const PAGE_SIZE = 10
 
 export function PinnedProductsPanel({ listId }: { listId: string }) {
   const { t } = useTranslation()
@@ -33,22 +33,26 @@ export function PinnedProductsPanel({ listId }: { listId: string }) {
   const updatePin = useUpdatePinnedProduct()
 
   const pinnedProducts = pinnedProductsQuery.data ?? []
-  const totalPages = Math.max(1, Math.ceil(pinnedProducts.length / pageSize))
+  const totalPages = Math.max(1, Math.ceil(pinnedProducts.length / PAGE_SIZE))
   const safePage = Math.min(page, totalPages - 1)
-  const firstVisibleIndex = safePage * pageSize
+  const firstVisibleIndex = safePage * PAGE_SIZE
   const visibleProducts = pinnedProducts.slice(
     firstVisibleIndex,
-    firstVisibleIndex + pageSize,
+    firstVisibleIndex + PAGE_SIZE,
   )
 
   function addToList(product: PinnedProduct, quantity: number) {
-    createItem.mutate({ name: product.name, quantity })
+    createItem.mutate({
+      name: product.name,
+      quantity,
+      category: product.category,
+    })
   }
 
   function changeQuantity(product: PinnedProduct, quantity: number) {
     updatePin.mutate({
       id: product.id,
-      body: pinnedProductUpdate(product, { defaultQuantity: quantity }),
+      body: pinnedProductRequest(product, { defaultQuantity: quantity }),
     })
   }
 
@@ -73,11 +77,11 @@ export function PinnedProductsPanel({ listId }: { listId: string }) {
     try {
       await updatePin.mutateAsync({
         id: product.id,
-        body: pinnedProductUpdate(product, { sortOrder: nextProductOrder }),
+        body: pinnedProductRequest(product, { sortOrder: nextProductOrder }),
       })
       await updatePin.mutateAsync({
         id: target.id,
-        body: pinnedProductUpdate(target, { sortOrder: nextTargetOrder }),
+        body: pinnedProductRequest(target, { sortOrder: nextTargetOrder }),
       })
     } finally {
       setMovingIds(new Set())
@@ -200,7 +204,7 @@ function PinnedProductsBody({
   )
 }
 
-function pinnedProductUpdate(
+function pinnedProductRequest(
   product: PinnedProduct,
   overrides: { defaultQuantity?: number; sortOrder?: number },
 ) {

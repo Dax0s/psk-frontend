@@ -116,6 +116,7 @@
       "quantity": "Kiekis",
       "quantityInvalid": "Kiekis turi būti skaičius ≥ 0",
       "addItem": "Pridėti",
+      "category": "Kategorija",
       "createItemError": "Nepavyko pridėti prekės.",
       "updateItemError": "Nepavyko atnaujinti prekės."
     },
@@ -140,6 +141,11 @@
     "suggestions": {
       "title": "Pasiūlymai"
     },
+    "productSuggestions": {
+      "title": "Maxima pasiūlymai",
+      "empty": "Atitinkančių Maxima pasiūlymų nerasta.",
+      "validUntil": "Iki {{date}}"
+    },
     "pins": {
       "title": "Prisegtos",
       "previous": "Ankstesnės prisegtos prekės",
@@ -153,5 +159,25 @@
       "moveUpLabel": "Perkelti {{name}} aukštyn",
       "moveDownLabel": "Perkelti {{name}} žemyn"
     }
+  },
+  "productCategories": {
+    "DAIRY_AND_EGGS": "Pieno gaminiai ir kiaušiniai",
+    "MEAT": "Mėsa ir mėsos gaminiai",
+    "FISH": "Žuvis ir žuvies produktai",
+    "FRUITS_AND_VEGETABLES": "Vaisiai ir daržovės",
+    "GROCERIES": "Bakalėja",
+    "SWEETS": "Saldumynai",
+    "CONFECTIONERY": "Konditerija",
+    "BEVERAGES": "Gėrimai",
+    "COFFEE_TEA": "Kava, kakava, arbata",
+    "FROZEN": "Šaldytas maistas",
+    "CANNED": "Konservuotas maistas",
+    "PREPARED_FOODS": "Kulinarija",
+    "BABY": "Kūdikių ir vaikų prekės",
+    "COSMETICS": "Kosmetika ir higiena",
+    "HOUSEHOLD_CHEMICALS": "Buitinė chemija",
+    "INDUSTRIAL": "Pramonės prekės",
+    "PLANTS": "Augalai ir jų priežiūros prekės",
+    "OTHER": "Kita"
   }
 }

@@ -4,9 +4,10 @@ import { ArrowDown, ArrowUp, Plus, Trash2 } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
+import { NumberInput } from '@/components/ui/number-input'
 import { Spinner } from '@/components/ui/spinner'
 import type { PinnedProduct } from '@/hooks/use-suggestions'
+import { parseQuantity } from '@/lib/utils'
 
 export function PinnedProductRow({
   product,
@@ -58,11 +59,8 @@ export function PinnedProductRow({
 
   return (
     <Card size="sm">
-      <CardContent className="flex flex-col gap-2">
-        <p className="text-sm font-medium break-words" title={product.name}>
-          {product.name}
-        </p>
-        <div className="flex items-center gap-1">
+      <CardContent className="flex items-center gap-2">
+        <div className="flex flex-col">
           <Button
             variant="ghost"
             size="icon-xs"
@@ -85,52 +83,47 @@ export function PinnedProductRow({
           >
             <ArrowDown />
           </Button>
-          <Input
-            type="number"
-            min="0"
-            step="any"
-            inputMode="decimal"
-            value={quantity}
-            onChange={(e) => setQuantity(e.target.value)}
-            onBlur={saveQuantity}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') e.currentTarget.blur()
-            }}
-            disabled={updating}
-            aria-label={t('shoppingLists.pins.quantityLabel', {
-              name: product.name,
-            })}
-            className="h-7 flex-1 min-w-0 px-2 text-sm"
-          />
-          <Button
-            variant="ghost"
-            size="icon-sm"
-            onClick={addToList}
-            disabled={adding || parsedQuantity === null}
-            aria-label={t('shoppingLists.pins.addLabel', {
-              name: product.name,
-            })}
-          >
-            {adding ? <Spinner /> : <Plus />}
-          </Button>
-          <Button
-            variant="ghost"
-            size="icon-sm"
-            onClick={() => onDelete(product.id)}
-            disabled={deleting}
-            aria-label={t('shoppingLists.pins.deleteLabel', {
-              name: product.name,
-            })}
-          >
-            {deleting ? <Spinner /> : <Trash2 />}
-          </Button>
         </div>
+        <div className="flex-1 min-w-0">
+          <p className="text-sm font-medium break-words">{product.name}</p>
+        </div>
+        <NumberInput
+          min={0}
+          value={quantity}
+          onChange={setQuantity}
+          onBlur={saveQuantity}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') e.currentTarget.blur()
+          }}
+          disabled={updating}
+          aria-label={t('shoppingLists.pins.quantityLabel', {
+            name: product.name,
+          })}
+          className="h-7 w-20 pl-2 text-sm"
+        />
+        <Button
+          variant="ghost"
+          size="icon-sm"
+          onClick={addToList}
+          disabled={adding || parsedQuantity === null}
+          aria-label={t('shoppingLists.pins.addLabel', {
+            name: product.name,
+          })}
+        >
+          {adding ? <Spinner /> : <Plus />}
+        </Button>
+        <Button
+          variant="ghost"
+          size="icon-sm"
+          onClick={() => onDelete(product.id)}
+          disabled={deleting}
+          aria-label={t('shoppingLists.pins.deleteLabel', {
+            name: product.name,
+          })}
+        >
+          {deleting ? <Spinner /> : <Trash2 />}
+        </Button>
       </CardContent>
     </Card>
   )
-}
-
-function parseQuantity(value: string) {
-  const quantity = Number(value)
-  return Number.isFinite(quantity) && quantity >= 0 ? quantity : null
 }

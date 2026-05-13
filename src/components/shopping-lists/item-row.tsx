@@ -12,35 +12,32 @@ import {
   useUpdateShoppingListItem,
 } from '@/hooks/use-shopping-lists'
 import type { ShoppingListItem } from '@/hooks/use-shopping-lists'
-import {
-  useCreatePinnedProduct,
-  usePinnedProducts,
-} from '@/hooks/use-suggestions'
+import { useCreatePinnedProduct } from '@/hooks/use-suggestions'
 
 export function ItemRow({
   listId,
   item,
+  isPinned,
 }: {
   listId: string
   item: ShoppingListItem
+  isPinned: boolean
 }) {
   const { t } = useTranslation()
   const [editOpen, setEditOpen] = useState(false)
   const updateMutation = useUpdateShoppingListItem(listId)
   const deleteMutation = useDeleteShoppingListItem(listId)
   const pinMutation = useCreatePinnedProduct()
-  const pinnedProductsQuery = usePinnedProducts()
-
-  const itemKey = normalize(item.name)
-  const isPinned =
-    pinnedProductsQuery.data?.some(
-      (product) => normalize(product.name) === itemKey,
-    ) ?? false
 
   function toggleChecked(next: boolean) {
     updateMutation.mutate({
       itemId: item.id,
-      body: { name: item.name, quantity: item.quantity, checked: next },
+      body: {
+        name: item.name,
+        quantity: item.quantity,
+        checked: next,
+        category: item.category,
+      },
     })
   }
 
@@ -48,6 +45,7 @@ export function ItemRow({
     pinMutation.mutate({
       name: item.name,
       defaultQuantity: item.quantity,
+      category: item.category,
     })
   }
 
@@ -114,8 +112,4 @@ export function ItemRow({
       />
     </>
   )
-}
-
-function normalize(value: string) {
-  return value.trim().toLowerCase().replace(/\s+/g, ' ')
 }
