@@ -74,7 +74,7 @@ function ShoppingListDetailContent() {
   }
 
   return (
-    <div className="mx-auto grid max-w-6xl gap-6 lg:grid-cols-[28rem_minmax(0,48rem)] lg:items-start">
+    <div className="mx-auto grid max-w-6xl gap-6 lg:grid-cols-[16rem_minmax(0,1fr)] lg:items-start">
       <aside className="order-2 lg:order-1">
         <PinnedProductsPanel listId={data.id} />
       </aside>

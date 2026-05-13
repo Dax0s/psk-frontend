@@ -148,6 +148,8 @@
     },
     "pins": {
       "title": "Prisegtos",
+      "show": "Rodyti prisegtas prekes",
+      "hide": "Slėpti prisegtas prekes",
       "previous": "Ankstesnės prisegtos prekės",
       "next": "Kitos prisegtos prekės",
       "pageLabel": "Prisegtų prekių puslapis {{page}}",

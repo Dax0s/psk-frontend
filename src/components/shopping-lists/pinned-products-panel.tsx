@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Pin } from 'lucide-react'
+import { ChevronDown, ChevronUp, Pin } from 'lucide-react'
 
+import { Button } from '@/components/ui/button'
 import {
   Card,
   CardAction,
@@ -19,12 +20,14 @@ import {
   useUpdatePinnedProduct,
 } from '@/hooks/use-suggestions'
 import type { PinnedProduct } from '@/hooks/use-suggestions'
+import { cn } from '@/lib/utils'
 
 const PAGE_SIZE = 10
 
 export function PinnedProductsPanel({ listId }: { listId: string }) {
   const { t } = useTranslation()
   const [page, setPage] = useState(0)
+  const [expanded, setExpanded] = useState(false)
   const [movingIds, setMovingIds] = useState<Set<string>>(() => new Set())
 
   const pinnedProductsQuery = usePinnedProducts()
@@ -95,15 +98,31 @@ export function PinnedProductsPanel({ listId }: { listId: string }) {
           <Pin className="size-4" />
           {t('shoppingLists.pins.title')}
         </CardTitle>
-        <CardAction>
-          <PinnedProductsPagination
-            currentPage={safePage}
-            totalPages={totalPages}
-            onPageChange={setPage}
-          />
+        <CardAction className="flex items-center gap-1">
+          <div className={cn('lg:block', expanded ? 'block' : 'hidden')}>
+            <PinnedProductsPagination
+              currentPage={safePage}
+              totalPages={totalPages}
+              onPageChange={setPage}
+            />
+          </div>
+          <Button
+            variant="ghost"
+            size="icon-sm"
+            className="lg:hidden"
+            onClick={() => setExpanded((prev) => !prev)}
+            aria-expanded={expanded}
+            aria-label={
+              expanded
+                ? t('shoppingLists.pins.hide')
+                : t('shoppingLists.pins.show')
+            }
+          >
+            {expanded ? <ChevronUp /> : <ChevronDown />}
+          </Button>
         </CardAction>
       </CardHeader>
-      <CardContent>
+      <CardContent className={cn('lg:block', expanded ? 'block' : 'hidden')}>
         <PinnedProductsBody
           isLoading={pinnedProductsQuery.isLoading}
           isError={pinnedProductsQuery.isError}

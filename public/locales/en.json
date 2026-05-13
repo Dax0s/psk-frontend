@@ -146,6 +146,8 @@
     },
     "pins": {
       "title": "Pins",
+      "show": "Show pinned products",
+      "hide": "Hide pinned products",
       "previous": "Previous pinned products",
       "next": "Next pinned products",
       "pageLabel": "Pinned products page {{page}}",
