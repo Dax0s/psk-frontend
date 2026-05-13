@@ -12,6 +12,7 @@ import { Spinner } from '@/components/ui/spinner'
 import { ShoppingListHeader } from '@/components/shopping-lists/shopping-list-header'
 import { AddItemForm } from '@/components/shopping-lists/add-item-form'
 import { ItemsList } from '@/components/shopping-lists/items-list'
+import { PinnedProductsPanel } from '@/components/shopping-lists/pinned-products-panel'
 import { useShoppingList } from '@/hooks/use-shopping-lists'
 
 export const Route = createFileRoute('/shopping-lists/$id')({
@@ -73,19 +74,25 @@ function ShoppingListDetailContent() {
   }
 
   return (
-    <div className="flex flex-col gap-6 max-w-3xl mx-auto">
-      <Button asChild variant="ghost" size="sm" className="self-start">
-        <Link to="/shopping-lists">
-          <ArrowLeft />
-          {t('shoppingLists.detail.back')}
-        </Link>
-      </Button>
+    <div className="mx-auto grid max-w-6xl gap-6 lg:grid-cols-[16rem_minmax(0,48rem)] lg:items-start">
+      <aside className="order-2 lg:order-1">
+        <PinnedProductsPanel listId={data.id} />
+      </aside>
 
-      <ShoppingListHeader list={data} />
+      <div className="order-1 flex min-w-0 flex-col gap-6 lg:order-2">
+        <Button asChild variant="ghost" size="sm" className="self-start">
+          <Link to="/shopping-lists">
+            <ArrowLeft />
+            {t('shoppingLists.detail.back')}
+          </Link>
+        </Button>
 
-      <AddItemForm listId={data.id} />
+        <ShoppingListHeader list={data} />
 
-      <ItemsList list={data} />
+        <AddItemForm listId={data.id} />
+
+        <ItemsList list={data} />
+      </div>
     </div>
   )
 }

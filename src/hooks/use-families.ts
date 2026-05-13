@@ -1,163 +1,119 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { useNavigate } from '@tanstack/react-router'
-import { HTTPError } from 'ky'
-import { toast } from 'sonner'
-import { useTranslation } from 'react-i18next'
-import { useAuth } from 'react-oidc-context'
-
 import { useApi } from '@/api/api-provider'
-import type { FamilyDetail, FamilySummary } from '@/api/families'
+import { shoppingListKeys } from '@/hooks/use-shopping-lists'
 
-const FAMILIES_KEY = ['families'] as const
+export type FamilySummary = {
+  id: string
+  name: string
+  inviteCode: string
+  isAdmin: boolean
+  memberCount: number
+}
 
-// ---- Queries ----
+export type FamilyMember = {
+  userId: string
+  email: string | null
+  joinedAt: string
+  isAdmin: boolean
+}
 
-export function useMyFamilies() {
+export type Family = FamilySummary & {
+  createdAt: string
+  members: Array<FamilyMember>
+}
+
+export type CreateFamilyRequest = {
+  name: string
+  email?: string
+}
+
+export type JoinFamilyRequest = {
+  inviteCode: string
+  email?: string
+}
+
+export const familyKeys = {
+  all: ['families'] as const,
+  detail: (id: string) => ['families', id] as const,
+}
+
+export function useFamilies() {
   const api = useApi()
-  const auth = useAuth()
   return useQuery({
-    queryKey: FAMILIES_KEY,
-    queryFn: () => api.get('family').json<FamilySummary[]>(),
-    enabled: !!auth.user?.access_token,
+    queryKey: familyKeys.all,
+    queryFn: () => api.get('family').json<Array<FamilySummary>>(),
   })
 }
 
-export function useFamilyDetail(familyId: string) {
+export function useFamily(id: string) {
   const api = useApi()
-  const auth = useAuth()
   return useQuery({
-    queryKey: [...FAMILIES_KEY, familyId],
-    queryFn: () => api.get(`family/${familyId}`).json<FamilyDetail>(),
-    enabled: !!auth.user?.access_token,
+    queryKey: familyKeys.detail(id),
+    queryFn: () => api.get(`family/${id}`).json<Family>(),
+    enabled: !!id,
   })
 }
-
-// ---- Error helper ----
-
-async function extractErrorCode(error: unknown): Promise<string | null> {
-  if (error instanceof HTTPError) {
-    try {
-      const body = await error.response.json<{ error: string }>()
-      return body.error ?? null
-    } catch {
-      return null
-    }
-  }
-  return null
-}
-
-// ---- Mutations ----
 
 export function useCreateFamily() {
   const api = useApi()
-  const qc = useQueryClient()
-  const { t } = useTranslation()
-
+  const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: ({ name, email }: { name: string; email?: string }) =>
-      api.post('family', { json: { name, email } }).json<FamilySummary>(),
+    mutationFn: (body: CreateFamilyRequest) =>
+      api.post('family', { json: body }).json<FamilySummary>(),
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: FAMILIES_KEY })
-      toast.success(t('families.success.created'))
-    },
-    onError: async (error) => {
-      const code = await extractErrorCode(error)
-      const message =
-        code === 'INVALID_NAME'
-          ? t('families.errors.generic')
-          : t('families.errors.generic')
-      toast.error(message)
+      queryClient.invalidateQueries({ queryKey: familyKeys.all })
     },
   })
 }
 
 export function useJoinFamily() {
   const api = useApi()
-  const qc = useQueryClient()
-  const { t } = useTranslation()
-
+  const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: ({
-      inviteCode,
-      email,
-    }: {
-      inviteCode: string
-      email?: string
-    }) =>
-      api
-        .post('family/join', { json: { inviteCode, email } })
-        .json<FamilySummary>(),
+    mutationFn: (body: JoinFamilyRequest) =>
+      api.post('family/join', { json: body }).json<FamilySummary>(),
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: FAMILIES_KEY })
-      toast.success(t('families.success.joined'))
-    },
-    onError: async (error) => {
-      const code = await extractErrorCode(error)
-      const message =
-        code === 'ALREADY_MEMBER'
-          ? t('families.errors.alreadyMember')
-          : code === 'FAMILY_NOT_FOUND'
-            ? t('families.errors.familyNotFound')
-            : t('families.errors.generic')
-      toast.error(message)
+      queryClient.invalidateQueries({ queryKey: familyKeys.all })
     },
   })
 }
 
 export function useDeleteFamily() {
   const api = useApi()
-  const qc = useQueryClient()
-  const navigate = useNavigate()
-  const { t } = useTranslation()
-
+  const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: (familyId: string) =>
-      api.delete(`family/${familyId}`).then(() => undefined),
-    onSuccess: () => {
-      qc.invalidateQueries({ queryKey: FAMILIES_KEY })
-      toast.success(t('families.success.deleted'))
-      navigate({ to: '/families/' })
-    },
-    onError: async () => {
-      toast.error(t('families.errors.generic'))
-    },
-  })
-}
-
-export function useRemoveMember() {
-  const api = useApi()
-  const qc = useQueryClient()
-  const { t } = useTranslation()
-
-  return useMutation({
-    mutationFn: ({ familyId, userId }: { familyId: string; userId: string }) =>
-      api.delete(`family/${familyId}/members/${userId}`).then(() => undefined),
-    onSuccess: (_, { familyId }) => {
-      qc.invalidateQueries({ queryKey: [...FAMILIES_KEY, familyId] })
-      toast.success(t('families.success.memberRemoved'))
-    },
-    onError: async () => {
-      toast.error(t('families.errors.generic'))
+    mutationFn: (id: string) => api.delete(`family/${id}`),
+    onSuccess: (_, id) => {
+      queryClient.invalidateQueries({ queryKey: familyKeys.all })
+      queryClient.removeQueries({ queryKey: familyKeys.detail(id) })
+      queryClient.invalidateQueries({ queryKey: shoppingListKeys.all })
     },
   })
 }
 
 export function useLeaveFamily() {
   const api = useApi()
-  const qc = useQueryClient()
-  const navigate = useNavigate()
-  const { t } = useTranslation()
-
+  const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: (familyId: string) =>
-      api.post(`family/${familyId}/leave`).then(() => undefined),
-    onSuccess: () => {
-      qc.invalidateQueries({ queryKey: FAMILIES_KEY })
-      toast.success(t('families.success.left'))
-      navigate({ to: '/families/' })
+    mutationFn: (id: string) => api.post(`family/${id}/leave`),
+    onSuccess: (_, id) => {
+      queryClient.invalidateQueries({ queryKey: familyKeys.all })
+      queryClient.removeQueries({ queryKey: familyKeys.detail(id) })
+      queryClient.invalidateQueries({ queryKey: shoppingListKeys.all })
     },
-    onError: async () => {
-      toast.error(t('families.errors.generic'))
+  })
+}
+
+export function useRemoveFamilyMember(familyId: string) {
+  const api = useApi()
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (userId: string) =>
+      api.delete(`family/${familyId}/members/${userId}`),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: familyKeys.detail(familyId),
+      })
     },
   })
 }
