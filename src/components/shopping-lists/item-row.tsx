@@ -33,6 +33,7 @@ export function ItemRow({
     updateMutation.mutate({
       itemId: item.id,
       body: {
+        version: item.version,
         name: item.name,
         quantity: item.quantity,
         checked: next,

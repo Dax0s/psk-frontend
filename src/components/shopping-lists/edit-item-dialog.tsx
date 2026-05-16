@@ -60,10 +60,12 @@ export function EditItemDialog({
       return
     }
     setError(null)
+    console.log(item.version)
     updateMutation.mutate(
       {
         itemId: item.id,
         body: {
+          version: item.version,
           name: name.trim(),
           quantity: parsed,
           checked: item.checked,
