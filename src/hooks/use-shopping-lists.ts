@@ -5,6 +5,7 @@ import type { ProductCategory } from '@/hooks/use-product-suggestions'
 
 export type ShoppingListItem = {
   id: string
+  version: number
   name: string
   quantity: number
   checked: boolean
@@ -31,6 +32,7 @@ export type CreateShoppingListItemRequest = {
 }
 
 export type UpdateShoppingListItemRequest = {
+  version: number
   name: string
   quantity: number
   checked: boolean

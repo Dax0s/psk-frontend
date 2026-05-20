@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Pencil, Pin, Trash2 } from 'lucide-react'
+import { HTTPError } from 'ky'
+import { toast } from 'sonner'
 
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
@@ -30,15 +32,27 @@ export function ItemRow({
   const pinMutation = useCreatePinnedProduct()
 
   function toggleChecked(next: boolean) {
-    updateMutation.mutate({
-      itemId: item.id,
-      body: {
-        name: item.name,
-        quantity: item.quantity,
-        checked: next,
-        category: item.category,
+    updateMutation.mutate(
+      {
+        itemId: item.id,
+        body: {
+          version: item.version,
+          name: item.name,
+          quantity: item.quantity,
+          checked: next,
+          category: item.category,
+        },
       },
-    })
+      {
+        onError: (err) => {
+          if (err instanceof HTTPError && err.response.status === 409) {
+            toast.error(t('shoppingLists.form.updateItemConflict'))
+          } else {
+            toast.error(t('shoppingLists.form.updateItemError'))
+          }
+        },
+      },
+    )
   }
 
   function pinItem() {

@@ -116,7 +116,8 @@
       "addItem": "Add",
       "category": "Category",
       "createItemError": "Failed to add the item.",
-      "updateItemError": "Failed to update the item."
+      "updateItemError": "Failed to update the item.",
+      "updateItemConflict": "This item was already updated by someone else. Please reload the page and try again."
     },
     "edit": {
       "title": "Edit shopping list",

@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { HTTPError } from 'ky'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -64,6 +65,7 @@ export function EditItemDialog({
       {
         itemId: item.id,
         body: {
+          version: item.version,
           name: name.trim(),
           quantity: parsed,
           checked: item.checked,
@@ -72,7 +74,13 @@ export function EditItemDialog({
       },
       {
         onSuccess: () => onOpenChange(false),
-        onError: () => setError(t('shoppingLists.form.updateItemError')),
+        onError: (err) => {
+          if (err instanceof HTTPError && err.response.status === 409) {
+            setError(t('shoppingLists.form.updateItemConflict'))
+          } else {
+            setError(t('shoppingLists.form.updateItemError'))
+          }
+        },
       },
     )
   }

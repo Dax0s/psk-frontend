@@ -118,7 +118,8 @@
       "addItem": "Pridėti",
       "category": "Kategorija",
       "createItemError": "Nepavyko pridėti prekės.",
-      "updateItemError": "Nepavyko atnaujinti prekės."
+      "updateItemError": "Nepavyko atnaujinti prekės.",
+      "updateItemConflict": "Šią prekę jau atnaujino kitas vartotojas. Perkraukite puslapį ir bandykite dar kartą."
     },
     "edit": {
       "title": "Redaguoti pirkinių sąrašą",
