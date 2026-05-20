@@ -16,10 +16,9 @@ jobs:
         with:
           node-version: '22'
           cache: 'npm'
-          cache-dependency-path: frontend/package-lock.json
+          cache-dependency-path: package-lock.json
 
       - name: Install and build
-        working-directory: ./frontend
         env:
           VITE_API_URL: https://psk.dklimavicius.com/api
           VITE_COGNITO_AUTHORITY: ${{ secrets.COGNITO_AUTHORITY }}
