@@ -121,6 +121,16 @@
       "updateItemError": "Nepavyko atnaujinti prekės.",
       "updateItemConflict": "Šią prekę jau atnaujino kitas vartotojas. Perkraukite puslapį ir bandykite dar kartą."
     },
+    "fromRecipe": {
+      "name": "Sąrašo pavadinimas",
+      "namePlaceholder": "pvz. Vakarienė",
+      "url": "Recepto nuoroda",
+      "urlPlaceholder": "https://...",
+      "urlRequired": "Recepto nuoroda privaloma",
+      "urlInvalid": "Įveskite teisingą URL",
+      "generate": "Sugeneruoti",
+      "createError": "Nepavyko sugeneruoti sąrašo iš recepto."
+    },
     "edit": {
       "title": "Redaguoti pirkinių sąrašą",
       "description": "Atnaujinkite pirkinių sąrašo pavadinimą."

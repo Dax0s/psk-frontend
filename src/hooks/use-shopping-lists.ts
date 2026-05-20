@@ -25,6 +25,11 @@ export type ShoppingListRequest = {
   familyId?: string
 }
 
+export type ShoppingListFromRecipeRequest = {
+  name: string
+  link: string
+}
+
 export type CreateShoppingListItemRequest = {
   name: string
   quantity: number
@@ -86,6 +91,21 @@ export function useCreateShoppingList() {
           queryKey: shoppingListKeys.byFamily(data.familyId),
         })
       }
+    },
+  })
+}
+
+export function useCreateShoppingListFromRecipe() {
+  const api = useApi()
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (body: ShoppingListFromRecipeRequest) =>
+      api
+        .post('shopping-list/from-recipe', { json: body, timeout: 120000 })
+        .json<ShoppingList>(),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: shoppingListKeys.all })
+      queryClient.invalidateQueries({ queryKey: suggestionKeys.all })
     },
   })
 }

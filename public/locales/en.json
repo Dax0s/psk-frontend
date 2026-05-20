@@ -119,6 +119,16 @@
       "updateItemError": "Failed to update the item.",
       "updateItemConflict": "This item was already updated by someone else. Please reload the page and try again."
     },
+    "fromRecipe": {
+      "name": "List name",
+      "namePlaceholder": "e.g. Dinner",
+      "url": "Recipe URL",
+      "urlPlaceholder": "https://...",
+      "urlRequired": "Recipe URL is required",
+      "urlInvalid": "Please enter a valid URL",
+      "generate": "Generate",
+      "createError": "Failed to generate the list from the recipe."
+    },
     "edit": {
       "title": "Edit shopping list",
       "description": "Update the name of your shopping list."

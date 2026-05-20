@@ -8,6 +8,7 @@ import { Footer } from '@/components/app/footer'
 import { CenteredSpinner } from '@/components/centered-spinner'
 import { Spinner } from '@/components/ui/spinner'
 import { CreateShoppingListForm } from '@/components/shopping-lists/create-shopping-list-form'
+import { CreateShoppingListFromRecipeForm } from '@/components/shopping-lists/create-shopping-list-from-recipe-form'
 import { ShoppingListsGrid } from '@/components/shopping-lists/shopping-lists-grid'
 import { useShoppingLists } from '@/hooks/use-shopping-lists'
 
@@ -52,6 +53,8 @@ function ShoppingListsContent() {
           {t('shoppingLists.description')}
         </p>
       </div>
+
+      <CreateShoppingListFromRecipeForm />
 
       <CreateShoppingListForm />
 
