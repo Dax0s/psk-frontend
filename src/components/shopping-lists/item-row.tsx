@@ -47,6 +47,8 @@ export function ItemRow({
         onError: (err) => {
           if (err instanceof HTTPError && err.response.status === 409) {
             toast.error(t('shoppingLists.form.updateItemConflict'))
+          } else {
+            toast.error(t('shoppingLists.form.updateItemError'))
           }
         },
       },
