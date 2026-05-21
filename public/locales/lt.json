@@ -11,7 +11,33 @@
       "language": "Kalba",
       "lithuanian": "Lietuvių",
       "english": "Anglų",
+      "admin": "Administratoriaus langas",
       "logout": "Atsijungti"
+    }
+  },
+  "admin": {
+    "title": "Administratoriaus langas",
+    "description": "Vykdymo metu valdomi nustatymai administratoriams.",
+    "back": "Į pradžią",
+    "audit": {
+      "title": "Audito žurnalas",
+      "description": "Įjunkite arba išjunkite paslaugų sluoksnio audito aspektą vykdymo metu.",
+      "enabled": "Įjungti audito žurnalą",
+      "enabledHelp": "Žurnalo įraše fiksuoti kiekvieną paslaugų ir planuoklių iškvietimą su vartotoju, metodu ir rezultatu.",
+      "includeArgs": "Įtraukti metodo argumentus",
+      "includeArgsHelp": "Pridėti serializuotus argumentus prie kiekvienos eilutės. Išjunkite, kad nesusidarytų jautrių duomenų nutekėjimas.",
+      "loadError": "Nepavyko įkelti audito nustatymų.",
+      "updateError": "Nepavyko atnaujinti audito nustatymų."
+    },
+    "logs": {
+      "title": "Sistemos žurnalas",
+      "description": "Naujausios JVM žurnalo eilutės, saugomos atmintyje serveryje.",
+      "filterPlaceholder": "Filtruoti žurnalą…",
+      "pause": "Stabdyti",
+      "resume": "Tiesiogiai",
+      "refresh": "Atnaujinti",
+      "loadError": "Nepavyko įkelti žurnalo.",
+      "empty": "Žurnalo įrašų nėra."
     }
   },
   "error": {

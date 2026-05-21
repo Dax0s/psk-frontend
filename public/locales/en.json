@@ -11,7 +11,33 @@
       "language": "Language",
       "lithuanian": "Lithuanian",
       "english": "English",
+      "admin": "Admin panel",
       "logout": "Log out"
+    }
+  },
+  "admin": {
+    "title": "Admin panel",
+    "description": "Runtime controls for backend administrators.",
+    "back": "Back to home",
+    "audit": {
+      "title": "Audit logging",
+      "description": "Toggle the service-layer audit log aspect at runtime.",
+      "enabled": "Enable audit logging",
+      "enabledHelp": "Log every call into service and scheduler beans with user, method, and outcome.",
+      "includeArgs": "Include method arguments",
+      "includeArgsHelp": "Append serialized arguments to each log line. Disable to avoid leaking sensitive data.",
+      "loadError": "Failed to load audit settings.",
+      "updateError": "Failed to update audit settings."
+    },
+    "logs": {
+      "title": "Backend logs",
+      "description": "Most recent JVM log lines held in memory on the backend.",
+      "filterPlaceholder": "Filter logs…",
+      "pause": "Pause",
+      "resume": "Live",
+      "refresh": "Refresh",
+      "loadError": "Failed to load logs.",
+      "empty": "No log entries."
     }
   },
   "error": {
