@@ -14,13 +14,28 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
+import {
+  Check,
+  Languages,
+  Laptop,
+  LogOut,
+  Moon,
+  ShieldCheck,
+  Sun,
+} from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { useTheme } from '@/components/theme-provider'
+import { useAuth } from 'react-oidc-context'
+import { useNavigate } from '@tanstack/react-router'
+import { useCurrentUser } from '@/hooks/use-current-user'
 
 export function Navbar() {
   const { t, i18n } = useTranslation()
   const { theme, setTheme } = useTheme()
   const auth = useAuth()
   const navigate = useNavigate()
+  const { data: currentUser } = useCurrentUser()
+  const isAdmin = currentUser?.role === 'ADMIN'
 
   return (
     <header className="sticky top-0 z-10 border-b bg-background">
@@ -116,6 +131,12 @@ export function Navbar() {
             <DropdownMenuSeparator />
 
             <DropdownMenuGroup>
+              {isAdmin && (
+                <DropdownMenuItem onClick={() => navigate({ to: '/admin' })}>
+                  <ShieldCheck />
+                  {t('navbar.user.admin')}
+                </DropdownMenuItem>
+              )}
               <DropdownMenuItem
                 variant="destructive"
                 onClick={() => navigate({ to: '/logout' })}

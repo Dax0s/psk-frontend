@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as LogoutRouteImport } from './routes/logout'
 import { Route as ErrorRouteImport } from './routes/error'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ShoppingListsIndexRouteImport } from './routes/shopping-lists.index'
 import { Route as FamiliesIndexRouteImport } from './routes/families/index'
@@ -25,6 +26,11 @@ const LogoutRoute = LogoutRouteImport.update({
 const ErrorRoute = ErrorRouteImport.update({
   id: '/error',
   path: '/error',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -55,6 +61,7 @@ const FamiliesFamilyIdRoute = FamiliesFamilyIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/error': typeof ErrorRoute
   '/logout': typeof LogoutRoute
   '/families/$familyId': typeof FamiliesFamilyIdRoute
@@ -64,6 +71,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/error': typeof ErrorRoute
   '/logout': typeof LogoutRoute
   '/families/$familyId': typeof FamiliesFamilyIdRoute
@@ -74,6 +82,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/error': typeof ErrorRoute
   '/logout': typeof LogoutRoute
   '/families/$familyId': typeof FamiliesFamilyIdRoute
@@ -85,6 +94,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/admin'
     | '/error'
     | '/logout'
     | '/families/$familyId'
@@ -94,6 +104,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/admin'
     | '/error'
     | '/logout'
     | '/families/$familyId'
@@ -103,6 +114,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/admin'
     | '/error'
     | '/logout'
     | '/families/$familyId'
@@ -113,6 +125,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRoute
   ErrorRoute: typeof ErrorRoute
   LogoutRoute: typeof LogoutRoute
   FamiliesFamilyIdRoute: typeof FamiliesFamilyIdRoute
@@ -135,6 +148,13 @@ declare module '@tanstack/react-router' {
       path: '/error'
       fullPath: '/error'
       preLoaderRoute: typeof ErrorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -177,6 +197,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRoute,
   ErrorRoute: ErrorRoute,
   LogoutRoute: LogoutRoute,
   FamiliesFamilyIdRoute: FamiliesFamilyIdRoute,
