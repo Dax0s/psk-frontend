@@ -1,8 +1,4 @@
-import { Link, useNavigate } from '@tanstack/react-router'
-import { Check, Languages, Laptop, LogOut, Moon, Sun } from 'lucide-react'
-import { useTranslation } from 'react-i18next'
-import { useAuth } from 'react-oidc-context'
-
+import { Link } from '@tanstack/react-router'
 import {
   DropdownMenu,
   DropdownMenuContent,
