@@ -5,7 +5,6 @@ import { ArrowLeft } from 'lucide-react'
 
 import { Route as errorRoute } from '@/routes/error'
 import { Navbar } from '@/components/app/navbar'
-import { Footer } from '@/components/app/footer'
 import { CenteredSpinner } from '@/components/centered-spinner'
 import { Button } from '@/components/ui/button'
 import { Spinner } from '@/components/ui/spinner'
@@ -39,7 +38,6 @@ function FamilyDetailPage() {
       <main className="flex-1 container mx-auto p-4">
         <FamilyDetailContent />
       </main>
-      <Footer />
     </div>
   )
 }

@@ -13,7 +13,6 @@ import {
 
 import { Route as errorRoute } from '@/routes/error'
 import { Navbar } from '@/components/app/navbar'
-import { Footer } from '@/components/app/footer'
 import { CenteredSpinner } from '@/components/centered-spinner'
 import { Spinner } from '@/components/ui/spinner'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -64,7 +63,6 @@ function AdminPage() {
         </Button>
         <AdminContent />
       </main>
-      <Footer />
     </div>
   )
 }

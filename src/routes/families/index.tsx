@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next'
 
 import { Route as errorRoute } from '@/routes/error'
 import { Navbar } from '@/components/app/navbar'
-import { Footer } from '@/components/app/footer'
 import { CenteredSpinner } from '@/components/centered-spinner'
 import { Spinner } from '@/components/ui/spinner'
 import { CreateFamilyDialog } from '@/components/families/create-family-dialog'
@@ -36,7 +35,6 @@ function FamiliesPage() {
       <main className="flex-1 container mx-auto p-4">
         <FamiliesContent />
       </main>
-      <Footer />
     </div>
   )
 }
